@@ -27,3 +27,8 @@ package-lock.json
 # IDE
 .vscode/
 .idea/
+
+#Ignore secrets
+secrets/
+*.json
+*.env
