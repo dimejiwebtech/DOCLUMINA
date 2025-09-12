@@ -1,0 +1,168 @@
+{% extends 'dashboard_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<title>{% block title %} Traffic Statistics - Doclumina {% endblock %}</title>
+
+{% include 'dashboard/sidebar.html' %}
+
+<section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+    <!-- Sidebar Toggle -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                    <span class="text-xl">☰</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8">
+    
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 space-y-4 sm:space-y-0">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Analytics Overview</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                <div class="flex items-center space-x-2">
+                    <input type="date" class="px-2 py-2 text-xs sm:text-sm border rounded hover:bg-gray-50 flex-1 min-w-0" id="start-date">
+                    <span class="text-gray-500 text-xs sm:text-sm">to</span>
+                    <input type="date" class="px-2 py-2 text-xs sm:text-sm border rounded hover:bg-gray-50 flex-1 min-w-0" id="end-date">
+                </div>
+                <button class="px-3 py-2 bg-green-600 text-white rounded text-xs sm:text-sm hover:bg-green-700 whitespace-nowrap" id="apply-date-range">Apply</button>
+            </div>
+        </div>
+
+        <!-- Main Chart Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-3 sm:space-y-0">
+                    <h3 class="text-lg font-semibold text-gray-900">Views</h3>
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="views-toggle" checked class="mr-2"> 
+                                <span class="text-sm">Views</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="visitors-toggle" checked class="mr-2"> 
+                                <span class="text-sm">Visitors</span>
+                            </label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <select class="text-sm border rounded px-2 py-1" id="period-dropdown">
+                                <option value="today">Days</option>
+                                <option value="week" selected>Weeks</option>
+                                <option value="month">Months</option>
+                                <option value="year">Years</option>
+                            </select>
+                            <button class="text-sm border rounded px-2 py-1">📈</button>
+                            <button class="text-sm border rounded px-2 py-1 bg-gray-800 text-white">📊</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full overflow-hidden">
+                    <canvas id="main-chart" class="w-full h-64 sm:h-80"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 mb-6 sm:mb-8">
+            <div class="bg-white border rounded-lg p-3 sm:p-4">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-eye text-gray-600 mr-2 text-sm"></i>
+                    <span class="text-xs sm:text-sm text-gray-600">Views</span>
+                </div>
+                <div class="text-lg sm:text-2xl font-bold" id="total-views-stat">973</div>
+                <div class="text-xs sm:text-sm text-green-600">↗ 14%</div>
+            </div>
+            
+            <div class="bg-white border rounded-lg p-3 sm:p-4">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-users text-gray-600 mr-2 text-sm"></i>
+                    <span class="text-xs sm:text-sm text-gray-600">Visitors</span>
+                </div>
+                <div class="text-lg sm:text-2xl font-bold" id="total-visitors-stat">440</div>
+                <div class="text-xs sm:text-sm text-green-600">↗ 11%</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Most Viewed Posts -->
+            <div class="lg:col-span-1 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">Most viewed</h3>
+                    </div>
+                    <div class="sm:ml-auto">
+                        <button class="px-3 py-1 sm:px-4 sm:py-2 bg-green-600 text-white rounded text-xs sm:text-sm">Posts & pages</button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6">
+                    <div id="most-viewed-list" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referrers -->
+            <div class="lg:col-span-1 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">Referrers</h3>
+                    </div>
+                    <div class="text-xs sm:text-sm text-gray-600">Views</div>
+                </div>
+                <div class="p-4 sm:p-6">
+                    <div id="referrers-list" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locations -->
+            <div class="lg:col-span-1 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex items-center">
+                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Locations</h3>
+                </div>
+                <div class="p-3 sm:p-4">
+                    <!-- Location Tabs -->
+                    <div class="flex mb-4">
+                        <button class="flex-1 px-2 sm:px-3 py-2 text-xs sm:text-sm bg-green-600 text-white rounded-l" data-tab="countries">Countries</button>
+                        <button class="flex-1 px-2 sm:px-3 py-2 text-xs sm:text-sm bg-gray-200 text-gray-700 rounded-r" data-tab="regions">Regions</button>
+                    </div>
+                    
+                    <!-- Map Placeholder -->
+                    <div class="bg-gray-100 h-36 sm:h-48 rounded flex items-center justify-center mb-4 relative overflow-hidden">
+                        <div id="locations-map" class="w-full h-full rounded bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                            <div class="text-center px-2">
+                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-white text-sm sm:text-xl"></i>
+                                </div>
+                                <div class="text-xs sm:text-sm text-gray-700">Interactive map will show here</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Data -->
+                    <div id="location-data" class="space-y-2">
+                        <!-- Real location data will populate here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/traffic_stats.js' %}"></script>
+{% endblock %}

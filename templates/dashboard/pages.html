@@ -1,0 +1,232 @@
+{% extends 'dashboard_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<title>{% block title %} Pages - Doclumina {% endblock %}</title>
+
+{% include 'dashboard/sidebar.html' %}
+
+<!-- Main Content -->
+<section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+    <!-- Top Header -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-800">
+                    Pages 
+                    <a href="{% url 'add_page' %}" class="ml-2 text-sm font-normal text-blue-600 hover:text-blue-800 border border-blue-600 px-2 py-1 rounded">Add Page</a>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="p-6">
+        <!-- Filter Tabs -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex flex-wrap gap-2">
+                    <a href="?status=all" 
+                       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {% if current_status == 'all' %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-700 hover:text-blue-600 hover:border-blue-300{% endif %}">
+                        All ({{ tab_counts.all }})
+                    </a>
+                    <a href="?status=published" 
+                       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {% if current_status == 'published' %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-700 hover:text-blue-600 hover:border-blue-300{% endif %}">
+                        Published ({{ tab_counts.published }})
+                    </a>
+                    <a href="?status=draft" 
+                       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {% if current_status == 'draft' %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-700 hover:text-blue-600 hover:border-blue-300{% endif %}">
+                        Draft ({{ tab_counts.draft }})
+                    </a>
+                    <a href="?status=trash" 
+                       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {% if current_status == 'trash' %}border-blue-600 text-blue-600{% else %}border-transparent text-gray-700 hover:text-blue-600 hover:border-blue-300{% endif %}">
+                        Trash ({{ tab_counts.trash }})
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-4">
+                <form id="bulk-action-form" method="POST" action="{% url 'bulk_page_action' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="current_status" value="{{ current_status }}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <select name="action" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Bulk Actions</option>
+                                {% if current_status == 'trash' %}
+                                    <option value="restore">Restore</option>
+                                    <option value="delete_permanently">Delete Permanently</option>
+                                {% else %}
+                                    <option value="publish">Publish</option>
+                                    <option value="draft">Move to Draft</option>
+                                    <option value="delete">Move to Trash</option>
+                                {% endif %}
+                            </select>
+                            <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 text-sm transition-colors">
+                                Apply
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pages List -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            {% if pages %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left w-8">
+                                <input type="checkbox" id="select-all" class="rounded border-gray-300 focus:ring-2 focus:ring-blue-500">
+                            </th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Title</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Author</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for page in pages %}
+                        <tr class="hover:bg-gray-50 group" data-page-id="{{ page.id }}">
+                            <td class="px-4 py-3">
+                                <input type="checkbox" name="page_ids" value="{{ page.id }}" form="bulk-action-form" class="page-checkbox rounded border-gray-300 focus:ring-2 focus:ring-blue-500">
+                            </td>
+                            <td class="px-4 py-3">
+                                <div>
+                                    <div class="font-medium text-gray-900">
+                                        {{ page.title }}
+                                        {% if page.status == 'draft' %}
+                                            <span class="text-gray-500 font-normal">— Draft</span>
+                                        {% endif %}
+                                    </div>
+                                    <!-- Row Actions - Hidden by default, shown on hover (desktop only) -->
+                                    <div class="hidden lg:flex items-center space-x-3 opacity-0 group-hover:opacity-100 transition-opacity mt-1">
+                                        {% if page.status == 'published' %}
+                                        <a href="{% url 'single_page' page.slug %}" target="_blank" 
+                                        class="text-blue-600 hover:text-blue-800 text-sm" title="View">
+                                            View
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'edit_page' page.id %}" 
+                                        class="text-blue-600 hover:text-blue-800 text-sm" title="Edit">
+                                            Edit
+                                        </a>
+                                        {% if current_status == 'trash' %}
+                                        <button onclick="restorePage({{ page.id }})" 
+                                                class="text-blue-600 hover:text-blue-800 text-sm" title="Restore">
+                                            Restore
+                                        </button>
+                                        {% else %}
+                                        <button onclick="deletePage({{ page.id }})" 
+                                                class="text-red-600 hover:text-red-800 text-sm" title="Trash">
+                                            Trash
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                    <!-- Mobile Actions - Always visible on mobile -->
+                                    <div class="flex lg:hidden items-center space-x-3 mt-1">
+                                    {% if page.status == 'published' %}
+                                    <a href="{% url 'single_page' page.slug %}" target="_blank" 
+                                    class="text-blue-600 hover:text-blue-800 text-sm">View</a>
+                                    {% endif %}
+                                    <a href="{% url 'edit_page' page.id %}" 
+                                    class="text-blue-600 hover:text-blue-800 text-sm">Edit</a>
+                                    {% if current_status == 'trash' %}
+                                    <button onclick="restorePage({{ page.id }})" 
+                                            class="text-blue-600 hover:text-blue-800 text-sm">Restore</button>
+                                    {% else %}
+                                    <button onclick="deletePage({{ page.id }})" 
+                                            class="text-red-600 hover:text-red-800 text-sm">Trash</button>
+                                    {% endif %}
+                                </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                {{ page.author_display_name }}
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                {% if page.status == 'published' %}
+                                    <span class="text-gray-900">Published</span><br>
+                                    <span class="text-gray-500">{{ page.published_date|date:"Y/m/d" }}</span>
+                                {% else %}
+                                    <span class="text-gray-900">Last Modified</span><br>
+                                    <span class="text-gray-500">{{ page.updated_at|date:"Y/m/d" }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if pages.has_other_pages %}
+            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        Showing {{ pages.start_index }} to {{ pages.end_index }} of {{ pages.paginator.count }} results
+                    </div>
+                    <div class="flex space-x-1">
+                        {% if pages.has_previous %}
+                        <a href="?page={{ pages.previous_page_number }}&status={{ current_status }}" 
+                           class="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors">
+                            ‹ Previous
+                        </a>
+                        {% endif %}
+                        
+                        {% for num in pages.paginator.page_range %}
+                        {% if pages.number == num %}
+                        <span class="px-3 py-2 bg-blue-600 text-white rounded text-sm">{{ num }}</span>
+                        {% elif num > pages.number|add:'-3' and num < pages.number|add:'3' %}
+                        <a href="?page={{ num }}&status={{ current_status }}" 
+                           class="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if pages.has_next %}
+                        <a href="?page={{ pages.next_page_number }}&status={{ current_status }}" 
+                           class="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors">
+                            Next ›
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="p-12 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-file-alt text-2xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No pages found</h3>
+                <p class="text-gray-600 mb-6">
+                    {% if current_status == 'trash' %}
+                        No pages in trash.
+                    {% else %}
+                        Get started by creating your first page.
+                    {% endif %}
+                </p>
+                {% if current_status != 'trash' %}
+                <a href="{% url 'add_page' %}" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors">
+                    Create Your First Page
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/pages.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,191 @@
+{% load static %}
+
+<!-- Mobile sidebar overlay -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[45] lg:hidden hidden"></div>
+
+<!-- Sidebar -->
+<section id="sidebar" class="fixed left-0 top-12 h-full w-64 bg-gray-800 text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-[50]">
+
+    <!-- Navigation Menu -->
+    <nav class="mt-4">
+        
+        <!-- Dashboard -->
+        <a href="{% url 'dashboard' %}" 
+        class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors {% if '/dashboard/' == request.path %}bg-blue-600{% endif %}">
+            <i class="fas fa-tachometer-alt mr-3 w-5"></i>
+            <span class="menu-text">Dashboard</span>
+        </a>
+        
+        <!-- Admin Only: Site Kit & Traffic Stats -->
+        {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+        <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+            <i class="fas fa-chart-line mr-3 w-5"></i>
+            <span class="menu-text">Site Kit</span>
+        </a>
+       
+        <a href="{% url 'analytics:traffic_stats' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors {% if '/dashboard/analytics/traffic-stats/' == request.path %}bg-blue-600 text-white{% else %}{% endif %}">
+            <i class="fas fa-chart-bar mr-3 w-5"></i>
+            <span class="menu-text">Traffic Stats</span>
+        </a>
+        {% endif %}
+        
+        <!-- Posts (with dropdown) -->
+        <div class="dropdown">
+            <!-- Mobile/Tablet version -->
+            <a href="#" 
+            class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer lg:hidden {% if '/posts/' in request.path %}bg-blue-600{% endif %}" 
+            onclick="toggleSubmenu(event, 'posts-submenu')">
+                <i class="fas fa-edit mr-3 w-5"></i>
+                <span class="menu-text">Posts</span>
+            </a>
+
+            <!-- Desktop version -->
+            <a href="{% url 'posts' %}" 
+            class="hidden lg:flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/posts/' in request.path %}bg-blue-600{% endif %}">
+                <i class="fas fa-edit mr-3 w-5"></i>
+                <span class="menu-text">Posts</span>
+            </a>
+
+            <!-- Mobile/Tablet submenu -->
+            <div id="posts-submenu" class="submenu bg-gray-700 lg:hidden">
+                <a href="{% url 'posts' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">All Posts</a>
+                <a href="{% url 'add_post' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add Post</a>
+                {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+                <a href="{% url 'categories' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Categories</a>
+                {% endif %}
+            </div>
+            <!-- Desktop hover submenu -->
+            <div class="submenu-right hidden lg:block cursor-pointer">
+                <a href="{% url 'posts' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white first:rounded-t-md">All Posts</a>
+                <a href="{% url 'add_post' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add Post</a>
+                {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+                <a href="{% url 'categories' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white last:rounded-b-md">Categories</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Comments -->
+        <a href="{% url 'comments' %}" class="flex items-center justify-between px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/comments/' in request.path %} bg-blue-600 {% endif %}">
+            <div class="flex items-center">
+                <i class="fa-solid fa-comment mr-3 w-5"></i>
+                <span class="menu-text">Comments</span>
+            </div>
+            {% if pending_comments_count > 0 %}
+                <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-2 min-w-[20px] text-center">
+                    {{ pending_comments_count }}
+                </span>
+            {% endif %}
+        </a>
+        
+        <!-- Media (with dropdown) -->
+        <div class="dropdown">
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer lg:hidden {% if '/media/' in request.path %}bg-blue-600{% endif %}" onclick="toggleSubmenu(event, 'media-submenu')">
+                <i class="fas fa-photo-video mr-3 w-5"></i>
+                <span class="menu-text">Media</span>
+            </a>
+
+            <!-- Desktop version -->
+            <a href="{% url 'media_library' %}" 
+            class="hidden lg:flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/media/' in request.path %}bg-blue-600{% endif %}">
+                <i class="fas fa-photo-video mr-3 w-5"></i>
+                <span class="menu-text">Media</span>
+            </a>
+
+            <!-- Mobile/Tablet submenu -->
+            <div id="media-submenu" class="submenu bg-gray-700 lg:hidden">
+                <a href="{% url 'media_library' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Library</a>
+                <a href="#" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add Media Files</a>
+            </div>
+            <!-- Desktop hover submenu -->
+            <div class="submenu-right hidden lg:block">
+                <a href="{% url 'media_library' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white first:rounded-t-md">Library</a>
+                <a href="{% url 'add_media' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white last:rounded-b-md">Add Media Files</a>
+            </div>
+        </div>
+        
+        <!-- Admin Only Sections -->
+        {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+        <!-- Mentors -->
+        <a href="{% url 'mentor_applications_dashboard' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/mentors/' in request.path %}bg-blue-600{% endif %}">
+            <i class="fas fa-user-tie mr-3 w-5"></i>
+            <span class="menu-text">Mentors</span> 
+        </a>
+
+        <!-- Mentorship -->
+        <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+            <i class="fas fa-handshake mr-3 w-5"></i>
+            <span class="menu-text">Mentorship</span>
+        </a>
+        
+        <!-- Pages (with dropdown) -->
+        <div class="dropdown">
+            <!-- Mobile/Tablet version -->
+            <a href="#" 
+            class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer lg:hidden {% if '/pages/' in request.path %}bg-blue-600{% endif %}" 
+            onclick="toggleSubmenu(event, 'pages-submenu')">
+                <i class="fas fa-file-alt mr-3 w-5"></i>
+                <span class="menu-text">Pages</span>
+            </a>
+
+            <!-- Desktop version -->
+            <a href="{% url 'pages' %}" 
+            class="hidden lg:flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/pages/' in request.path %}bg-blue-600{% endif %}">
+                <i class="fas fa-file-alt mr-3 w-5"></i>
+                <span class="menu-text">Pages</span>
+            </a>
+
+            <!-- Mobile/Tablet submenu -->
+            <div id="pages-submenu" class="submenu bg-gray-700 lg:hidden">
+                <a href="{% url 'pages' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">All Pages</a>
+                <a href="{% url 'add_page' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add Page</a>
+            </div>
+            <!-- Desktop hover submenu -->
+            <div class="submenu-right hidden lg:block">
+                <a href="{% url 'pages' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white first:rounded-t-md">All Pages</a>
+                <a href="{% url 'add_page' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white last:rounded-b-md">Add Page</a>
+            </div>
+        </div>
+        
+        <!-- Testimonials -->
+        <a href="{% url 'testimonials' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/testimonials/' in request.path %}bg-blue-600{% endif %}">
+            <i class="fas fa-quote-right mr-3 w-5"></i>
+            <span class="menu-text">Testimonials</span>
+        </a>
+        {% endif %}
+        
+        <!-- Users (with dropdown) -->
+        <div class="dropdown">
+            {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+            <a href="{% url 'users' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/users/' in request.path %}bg-blue-600{% endif %}" onclick="handleUsersClick(event, 'users-submenu')">
+                <i class="fas fa-users mr-3 w-5"></i>
+                <span class="menu-text">Users</span>
+            </a>
+            <!-- Mobile/Tablet submenu -->
+            <div id="users-submenu" class="submenu bg-gray-700 lg:hidden">
+                <a href="{% url 'users' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">All Users</a>
+                <a href="{% url 'add_user' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add User</a>
+                <a href="{% url 'profile' %}" class="block px-8 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Profile</a>
+            </div>
+            <!-- Desktop hover submenu -->
+            <div class="submenu-right hidden lg:block">
+                <a href="{% url 'users' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white first:rounded-t-md">All Users</a>
+                <a href="{% url 'add_user' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">Add User</a>
+                <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white last:rounded-b-md">Profile</a>
+            </div>
+            {% else %}
+            <!-- Author sees only Profile as Users -->
+            <a href="{% url 'profile' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer {% if '/profile/' in request.path %}bg-blue-600{% endif %}">
+                <i class="fas fa-users mr-3 w-5"></i>
+                <span class="menu-text">Users</span>
+            </a>
+            {% endif %}
+        </div>
+        
+        <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" onclick="toggleSidebar(event)">
+            <i id="collapse-icon" class="fas fa-angle-double-left mr-3 w-5"></i>
+            <span class="menu-text">Collapse Menu</span>
+        </a>
+    </nav>
+</section>
+
+<script src="{% static 'js/dashboard_base.js' %}"></script>

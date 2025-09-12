@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %} Housemanship, NYSC, Best Plug for Doctors -
+      Doclumina {% endblock%}
+    </title>
+    <meta name="description" content="{% block meta_description %}Professional platform helping Nigerian medical graduates navigate house jobs and build successful medical careers.{% endblock %}" />
+    <meta name="keywords" content="{% block meta_keywords %}housemanship, NYSC, doctors, medical graduates, Nigeria, medical careers{% endblock %}" />
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    
+  <link rel="shortcut icon" href="{% static 'images/favicon1-1.png' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'images/favicon1-1.png' %}" type="image/x-icon">
+
+   {% block head %}{% endblock %}
+
+  </head>
+
+  <body
+    class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+  >
+   {% block navbar %}  {% endblock %}
+
+    {% block content %} {% endblock %}
+
+<footer
+      class="bg-gray-900 dark:bg-gray-950 text-white py-16 transition-colors duration-300 mt-10"
+      id="footer"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div class="col-span-2">
+            <div class="flex items-center space-x-2 mb-4 h-10 w-auto">
+              <a href="{% url 'homepage' %}"><img src="{% static 'images/logo1.png' %}" alt=""></a>
+            </div>
+            <p class="text-gray-400 mb-6 max-w-md">
+              Empowering Nigerian medical graduates with the resources,
+              networking, and opportunities needed to excel in their medical
+              careers.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-700 transition-all duration-200 hover:scale-110"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-700 transition-all duration-200 hover:scale-110"
+              >
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-primary-400 hover:bg-gray-700 transition-all duration-200 hover:scale-110"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="{% url 'about' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'book_gp' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Book A GP</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'mental_health' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Mental Health Service</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'mentorship' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Mentorship</a
+                >
+              </li>
+
+              <li>
+                <a
+                  href="{% url 'posts_by_category_or_post' slug='house-job-content' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >House Job Content</a
+                >
+              </li>
+
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-4">Support</h3>
+            <ul class="space-y-2">
+             
+              <li>
+                <a
+                  href="{% url 'contact' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'single_page' slug='privacy-policy' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'single_page' slug='terms-of-service' %}"
+                  class="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Google Play Badge Section -->
+        <div class="border-t border-gray-800 mt-12 pt-8">
+          <div class="text-center mb-8">
+            <h3 class="font-semibold mb-4">Download our Housemanship App</h3>
+            <a href="https://play.google.com/store/apps/details?id=com.medicsblog" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors">
+              <i class="fab fa-google-play mr-3 text-xl"></i>
+              <div class="text-left">
+                  <div class="text-xs">Get it on</div>
+                  <div class="text-sm font-semibold">Google Play</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center">
+          <p class="text-gray-400">
+            © 2025 <a href="{% url 'homepage' %}" class="font-bold text-primary">Doclumina</a>. All rights reserved. Powered By WTD.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button
+      id="backToTop"
+      class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-600 hover:scale-110 z-50"
+      aria-label="Back to top"
+    >
+      <i class="fas fa-chevron-up"></i>
+    </button>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    {% include 'partials/cookie_banner.html' %}
+  </body>
+</html>

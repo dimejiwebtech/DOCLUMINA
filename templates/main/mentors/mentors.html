@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mentors - Doclumina{% endblock %}
+
+{% block meta_description %}Your specific page description here{% endblock %}
+{% block meta_keywords %}your, page, specific, keywords{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 py-16 px-4 sm:px-6 lg:px-8 mt-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                Our <span class="text-blue-600 dark:text-blue-400">Mentors</span>
+            </h1>
+            <p class="md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Meet the experienced professionals guiding the next generation of healthcare leaders. 
+                Our mentors bring decades of experience across various medical specialties.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Stats Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ page_obj.paginator.count }}+</div>
+                    <div class="text-gray-600 dark:text-gray-400">Expert Mentors</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+                    <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">15+</div>
+                    <div class="text-gray-600 dark:text-gray-400">Medical Specialties</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">500+</div>
+                    <div class="text-gray-600 dark:text-gray-400">Success Stories</div>
+                </div>
+            </div>
+
+            <!-- Mentors Grid -->
+            <div class="max-w-6xl mx-auto">
+                {% if page_obj %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {% for mentor in page_obj %}
+                            <div class="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                                <!-- Profile Picture -->
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ mentor.professional_picture.url }}" alt="{{ mentor.full_name }}"
+                                         class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+
+                                <!-- Mentor Info -->
+                                <div class="p-5">
+                                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                        {{ mentor.full_name }}
+                                    </h2>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                            <div>
+                                                <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Job Title:</span>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ mentor.job_title }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                            <div>
+                                                <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Expertise:</span>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ mentor.area_of_expertise|title }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                                            <div>
+                                                <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Experience:</span>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ mentor.years_of_experience }} years</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Button -->
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+                                        <a href="{% url 'contact' %}">Connect with Mentor</a>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!-- Empty State -->
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Mentors Available</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">We're currently building our mentor network. Check back soon!</p>
+                        <button class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">
+                            Join as a Mentor
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="flex justify-center mt-12">
+                <nav class="flex items-center space-x-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}"
+                           class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium">
+                            Previous
+                        </a>
+                    {% else %}
+                        <span class="px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-400 dark:text-gray-500 rounded-lg cursor-not-allowed font-medium">
+                            Previous
+                        </span>
+                    {% endif %}
+
+                    <div class="flex items-center space-x-1">
+                        {% for page_num in page_obj.paginator.page_range %}
+                            {% if page_num == page_obj.number %}
+                                <span class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg font-medium">
+                                    {{ page_num }}
+                                </span>
+                            {% else %}
+                                <a href="?page={{ page_num }}"
+                                   class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium">
+                                    {{ page_num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}"
+                           class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium">
+                            Next
+                        </a>
+                    {% else %}
+                        <span class="px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-400 dark:text-gray-500 rounded-lg cursor-not-allowed font-medium">
+                            Next
+                        </span>
+                    {% endif %}
+                </nav>
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

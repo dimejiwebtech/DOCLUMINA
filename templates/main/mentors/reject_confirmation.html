@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Provide Rejection Reason{% endblock %}
+
+{% block content %}
+<div class="content">
+  <h1>Provide Rejection Reason</h1>
+  <p>You are about to reject the following applications:</p>
+  <ul>
+    {% for application in applications %}
+      <li><strong>{{ application.full_name }}</strong> ({{ application.email }})</li>
+    {% endfor %}
+  </ul>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="action" value="reject_applications">
+    <input type="submit" name="apply" value="Reject Selected Applications" class="default">
+
+  </form>
+</div>
+{% endblock %}

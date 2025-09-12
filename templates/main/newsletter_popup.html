@@ -1,0 +1,118 @@
+{% load static %}
+
+<!-- Newsletter Popup Modal -->
+<div id="newsletterModal" class="fixed inset-0 z-50 hidden bg-transparent bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative shadow-2xl">
+        <!-- Close Button -->
+        <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">
+            &times;
+        </button>
+        
+        <!-- Header with Gradient -->
+        <div class="bg-blue-700 text-white p-6 rounded-t-2xl">
+            <div class="text-center">
+                <div class="text-3xl mb-2">🩺</div>
+                <h2 class="text-xl font-bold mb-1">Join Our Healthcare Elite</h2>
+                <p class="text-blue-100 text-sm">
+                    Connect with top medical professionals & unlock exclusive opportunities
+                </p>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="p-6">
+            <div class="text-center mb-4">
+                <div class="flex justify-center items-center space-x-4 text-sm text-gray-600 mb-4">
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                        Mentorship
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        Networking
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                        Job Alerts
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <form id="newsletterForm" class="space-y-3">
+                {% csrf_token %}
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500"></i></span>
+                    <input type="text" name="full_name" required 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="Full Name">
+                </div>
+                
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500"></i>
+                    </span>
+                    <input type="email" name="email" required 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="Professional Email">
+                </div>
+                
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><i class="fas fa-graduation-cap absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500"></i>
+                    </span>
+                    <input type="text" name="university" required 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="University Graduated From">
+                </div>
+                
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><i class="fas fa-briefcase absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500"></i></span>
+                    <input type="text" name="current_role" required 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="Current Role (e.g., Medical Student, Doctor)">
+                </div>
+                
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><i class="fab fa-whatsapp absolute left-3 top-1/2 transform -translate-y-1/2 text-green-600"></i></span>
+                    <input type="tel" name="whatsapp_line" required 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="WhatsApp Number">
+                </div>
+                
+                <button type="submit" id="submitBtn" class="w-full bg-blue-700  text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-all duration-300 transform hover:scale-[1.02] shadow-lg">
+                    <span class="flex items-center justify-center">
+                        <span>Get Exclusive Access</span>
+                        <span class="ml-2"><i class="fas fa-rocket ml-2 text-yellow-400"></i></span>
+                    </span>
+                </button>
+            </form>
+            
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden text-center mt-4">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div class="text-green-700 font-medium mb-1">🎉 You're In!</div>
+                    <p class="text-sm text-green-600">Welcome to our exclusive healthcare community.</p>
+                </div>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="text-center mt-4 pt-4 border-t border-gray-100">
+                <p class="text-xs text-gray-500">
+                    Join <span class="font-semibold text-blue-600">500+</span> healthcare professionals already connected
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="{% static 'js/newsletter.js' %}"></script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+</style>

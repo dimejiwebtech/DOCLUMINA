@@ -1,0 +1,198 @@
+{% extends 'dashboard_base.html' %}
+
+{% load static %}
+ 
+    {% block content %}
+    <title>{% block title %} Dashboard - Doclumina {% endblock %}</title>
+    <!-- Include the sidebar -->
+    {% include 'dashboard/sidebar.html' %}
+       <!-- Include the sidebar -->
+    
+    <!-- Main Content -->
+    <section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+        <!-- Top Header -->
+        <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Content -->
+        <div class="p-6">
+            <!-- Welcome Message -->
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">Welcome to your dashboard!</h2>
+            </div>
+            
+            <!-- Dashboard Widgets Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                <!-- At a Glance Widget -->
+                <section class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                        <h3 class="font-semibold text-gray-800">At a Glance</h3>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-edit text-blue-600 text-l mr-2"></i>
+                                    <div class="text-2xl font-bold text-blue-600">{{ posts_count }}</div>
+                                </div>
+                                <div class="text-sm text-gray-600">Posts</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-file-alt text-blue-600 text-l mr-2"></i>
+                                    <div class="text-2xl font-bold text-blue-600">{{ pages_count }}</div>
+                                </div>
+                                <div class="text-sm text-gray-600">Pages</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-comments text-blue-600 text-l mr-2"></i>
+                                    <div class="text-2xl font-bold text-blue-600">{{ comments_count }}</div>
+                                </div>
+                                <div class="text-sm text-gray-600">Comments</div>
+                            </div>
+                        <div class="text-center">
+                            {% if pending_comments_count > 0 %}
+                                <div class="flex items-center justify-center mb-2">
+                                    <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-2 min-w-[20px] text-center">
+                                        {{ pending_comments_count }}
+                                    </span>
+                                    <div class="text-sm text-gray-600 ml-2">
+                                        Comment{% if pending_comments_count > 1 %}s{% endif %} in Moderation
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="text-sm text-gray-500 italic">
+                                    No comments in moderation
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Site Kit Summary Widget -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                        <h3 class="font-semibold text-gray-800">Site Kit Summary</h3>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-700 text-sm">Visit your Site Kit dashboard</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm text-gray-600 mb-1">Total Unique Visitors</div>
+                                <div class="text-2xl font-bold text-gray-800">1.2K</div>
+                                <div class="text-xs text-green-600">↑ 9.1%</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-600 mb-1">Avg. Time on Page</div>
+                                <div class="text-2xl font-bold text-gray-800">5m 59s</div>
+                                <div class="text-xs text-green-600">↑ 7.1%</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-600 mb-1">Total Impressions</div>
+                                <div class="text-2xl font-bold text-gray-800">12K</div>
+                                <div class="text-xs text-green-600">↑ 22.1%</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-600 mb-1">Total Clicks</div>
+                                <div class="text-2xl font-bold text-gray-800">554</div>
+                                <div class="text-xs text-green-600">↑ 5.3%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if user.is_superuser or 'Administrator' in user.groups.all|join:"," %}
+                <!-- Jetpack Stats Widget -->
+                <section class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                        <h3 class="font-semibold text-gray-800">Analytics Overview</h3>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <!-- Time Period Tabs -->
+                        <div class="flex mb-4 text-sm" id="period-tabs">
+                            <button data-period="today" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-l period-btn">Days</button>
+                            <button data-period="week" class="px-3 py-1 bg-gray-800 text-white period-btn active">Weeks</button>
+                            <button data-period="month" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 period-btn">Months</button>
+                            <button data-period="year" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-r period-btn">Years</button>
+                        </div>
+                       
+                        <!-- Chart Container -->
+                        <div class="mb-4">
+                            <canvas id="analytics-chart" height="130"></canvas>
+                        </div>
+                       
+                        <!-- Stats Summary -->
+                        <div class="text-center">
+                            <div class="text-lg font-semibold text-gray-800 mb-2" id="period-title">7 Day Highlights</div>
+                            <div class="space-y-1 text-sm text-gray-600" id="stats-summary">
+                                <div class="flex justify-between">
+                                    <span>Total Views</span>
+                                    <span class="font-medium" id="total-views">Loading...</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Top Source</span>
+                                    <span class="font-medium" id="top-source">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Posts & Referrers Section -->
+                    <div class="mt-4 border-t border-gray-200 pt-4">
+                        <!-- Tab Navigation -->
+                        <div class="flex mb-3">
+                            <button id="posts-tab" class="flex-1 px-3 py-2 text-sm bg-gray-800 text-white rounded-l border-r border-gray-600">
+                                Top Posts & Pages
+                            </button>
+                            <button id="referrers-tab" class="flex-1 px-3 py-2 text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-r">
+                                Top Referrers
+                            </button>
+                        </div>
+                        
+                        <!-- Content Areas -->
+                        <div id="posts-content" class="space-y-2">
+                            <!-- Dynamic posts content -->
+                        </div>
+                        
+                        <div id="referrers-content" class="space-y-2 hidden">
+                            <!-- Dynamic referrers content -->
+                        </div>
+                        
+                        <div class="mt-3 text-center">
+                            <a href="{% url 'analytics:traffic_stats' %}" class="text-sm text-blue-600 hover:text-blue-800">
+                                View all posts & pages stats
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <!-- Main Content -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/traffic.js' %}"></script>
+   {% endblock %}
+<!-- </body> -->

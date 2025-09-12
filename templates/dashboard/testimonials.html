@@ -1,0 +1,217 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+ 
+{% block content %}
+<title>{% block title %} Testimonials - Doclumina {% endblock %}</title>
+<!-- Include the sidebar -->
+{% include 'dashboard/sidebar.html' %}
+
+<!-- Main Content -->
+<section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+    <!-- Top Header -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonial Management -->
+    <div class="p-4 lg:p-6">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Testimonials</h1>
+            </div>
+            <button id="add-testimonial-btn" class="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center">
+                <i class="fas fa-plus mr-2"></i>
+                Add Testimonial
+            </button>
+        </div>
+
+        <!-- Testimonials List -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            {% if testimonials %}
+                <!-- Desktop Table View -->
+                <div class="hidden md:block">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Title</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Testimony</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for testimonial in testimonials %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">{{ testimonial.name }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-gray-600">{{ testimonial.current_job }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-gray-600 max-w-xs truncate">{{ testimonial.testimony }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ testimonial.created_at|date:"M d, Y" }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="editTestimonial({{ testimonial.id }})" class="text-blue-600 hover:text-blue-900 mr-3">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteTestimonial({{ testimonial.id }})" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Card View -->
+                <div class="md:hidden">
+                    {% for testimonial in testimonials %}
+                    <div class="p-4 border-b border-gray-200 last:border-b-0">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-medium text-gray-900">{{ testimonial.name }}</h3>
+                                <p class="text-sm text-gray-600">{{ testimonial.current_job }}</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editTestimonial({{ testimonial.id }})" class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-edit text-sm"></i>
+                                </button>
+                                <button onclick="deleteTestimonial({{ testimonial.id }})" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">{{ testimonial.testimony }}</p>
+                        <p class="text-xs text-gray-500">{{ testimonial.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-quote-left text-gray-300 text-5xl mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No testimonials yet</h3>
+                    <p class="text-gray-500 mb-6">Start by adding your first testimonial</p>
+                    <button id="add-first-testimonial-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                        Add First Testimonial
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="mt-6 flex flex-col sm:flex-row items-center justify-between">
+            <div class="text-sm text-gray-700 mb-4 sm:mb-0">
+                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} testimonials
+            </div>
+            <div class="flex items-center space-x-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">Previous</a>
+                {% endif %}
+                
+                <span class="px-3 py-2 text-sm font-medium text-gray-700 bg-blue-50 border border-blue-200">
+                    {{ page_obj.number }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">Last</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Add/Edit Testimonial Modal -->
+<div id="testimonial-modal" class="fixed inset-0 bg-transparent bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 id="modal-title" class="text-lg font-semibold text-gray-900">Add Testimonial</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form id="testimonial-form" class="p-6 space-y-4">
+                <input type="hidden" id="testimonial-id" value="">
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                    <input type="text" id="name" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="current_job" class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
+                    <input type="text" id="current_job" name="current_job" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="testimony" class="block text-sm font-medium text-gray-700 mb-2">Testimony *</label>
+                    <textarea id="testimony" name="testimony" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                    <button type="button" id="cancel-btn" class="w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" id="submit-btn" class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200">
+                        Save Testimonial
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-modal" class="fixed inset-0 bg-transparent bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm">
+            <div class="p-6 text-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete Testimonial</h3>
+                <p class="text-gray-600 mb-6">Are you sure you want to delete this testimonial? This action cannot be undone.</p>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="cancel-delete" class="w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium">
+                        Cancel
+                    </button>
+                    <button id="confirm-delete" class="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/testimonials.js' %}"></script>
+
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}

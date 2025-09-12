@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact Form Submission</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8fafc; line-height: 1.6;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 40px;">
+        
+        <h1 style="color: #1f2937; margin: 0 0 30px 0; font-size: 24px; text-align: center;">New Contact Form Submission</h1>
+        
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+            A new contact form submission has been received from Doclumina.
+        </p>
+        
+        <div style="background-color: #f3f4f6; border-radius: 8px; padding: 25px; margin: 30px 0;">
+            <h3 style="color: #1f2937; margin: 0 0 20px 0; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
+                Contact Details
+            </h3>
+            
+            <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                    <td style="color: #6b7280; font-weight: bold; width: 30%; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        Name:
+                    </td>
+                    <td style="color: #1f2937; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        {{ name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color: #6b7280; font-weight: bold; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        Email:
+                    </td>
+                    <td style="color: #1f2937; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        {{ email }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color: #6b7280; font-weight: bold; padding: 8px 0;">
+                        Subject:
+                    </td>
+                    <td style="color: #1f2937; padding: 8px 0;">
+                        {{ subject_display }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style="background-color: #f0f9ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 30px 0;">
+            <h4 style="color: #1f2937; margin: 0 0 10px 0; font-size: 16px;">
+                Message:
+            </h4>
+            <p style="color: #4b5563; margin: 0; font-size: 14px; line-height: 1.5; white-space: pre-wrap;">{{ message }}</p>
+        </div>
+        
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px; text-align: center;">
+            This message was sent from the Doclumina contact form.
+        </p>
+        
+    </div>
+</body>
+</html>

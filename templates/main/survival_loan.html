@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+<!--  -->
+{% load static %}
+<!--  -->
+<title>{% block title %}Survival Loan - Doclumina {% endblock %}</title>
+
+{% block meta_description %}Your specific page description here{% endblock %}
+{% block meta_keywords %}your, page, specific, keywords{% endblock %}
+
+{% block content %} 
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 py-16 lg:py-24">
+        <div class="absolute inset-0 bg-grid-pattern opacity-50"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+                <div class="mb-6">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-medium mb-6">
+                        <i class="fas fa-heartbeat mr-2"></i>
+                        Designed by Doctors, For Doctors
+                    </div>
+                    <h1 class="text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                        Survival Loan
+                        <span class="block text-blue-600 dark:text-blue-400">Financial Lifeline</span>
+                    </h1>
+                    <p class="md:text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                        Introducing the “survival Loan” – A Financial Lifeline Designed By Doctors, For House Officers
+
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                            <i class="fas fa-bolt mr-2"></i>
+                            Apply Now
+                        </button>
+                        <button class="border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                            <i class="fas fa-calculator mr-2"></i>
+                            Calculate Loan
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-12 lg:mt-0">
+                    <div class="relative">
+                        <div class="absolute -inset-4  rounded-lg blur opacity-75 dark:opacity-50"></div>
+                        <div class="relative bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl">
+                            <div class="text-center mb-6">
+                                <i class="fas fa-user-md text-6xl text-blue-600 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Quick Approval</h3>
+                                <p class="text-gray-600 dark:text-gray-300">Funds within 24-48 hours</p>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">Loan Amount</span>
+                                    <span class="font-semibold text-green-600">₦244,000 - ₦732,000</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">Interest Rate</span>
+                                    <span class="font-semibold text-blue-600">Competitive & Fair</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">Collateral</span>
+                                    <span class="font-semibold text-red-600">None Required</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features Section -->
+    <section class="py-16 lg:py-24 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Why This Loan is Different
+                </h2>
+                <p class="md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Unlike traditional bank loans, our Housemanship Support Loan is crafted with the realities of medical practice in Nigeria in mind.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-blue-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">No Collateral Required</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        We understand that as a house officer, you may not have assets to offer as collateral. Our loan is based on trust and your future earning potential.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-green-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-clock text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Fast Disbursement</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Funds within 24-48 hours of approval. We know medical emergencies and opportunities don't wait.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-purple-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Minimal Documentation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Simple application process with minimal paperwork. Just basic identification and proof of housemanship placement.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-orange-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-calendar-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Flexible Repayment</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Repayment begins only after salary stabilization (usually 2-6 months). Plans tailored to your rotation schedule and income flow.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-red-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-ban text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Zero Early Penalties</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        No penalties for early repayment. Pay off your loan early without any additional charges when your financial situation improves.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl border border-teal-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Built on Trust</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Created by fellow medical professionals who understand the unique challenges of working 48-hour shifts and system delays.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Is It For Section -->
+    <section class="py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Survival Loan for House Officers
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    This loan is specifically tailored for Nigerian House Officers, recognizing the frequent delays in their salaries—hence the name "Survival Loan." 
+                </p>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-5">
+                    You become eligible for this loan once you have completed at least two months of your housemanship and have no more than two months remaining before completion. To qualify, you must be currently serving in a hospital listed under the MDCN portal.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-graduation-cap text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Fresh Medical Graduates</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Preparing for or currently undergoing housemanship programs across Nigeria.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-home text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Relocation Support</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Young doctors facing relocation, accommodation, or urgent family needs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Pre-Salary Support</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Medical officers who have been posted but haven't received their first salaries.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-certificate text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Professional Development</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Support for licensing, travel, clinical supplies, and professional development needs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Process Section -->
+    <section class="py-16 lg:py-24 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Simple Application Process
+                </h2>
+                <p class="md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Get your survival loan in just 3 easy steps. No complicated procedures, no endless paperwork.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Financial Dashboard Interface" class="w-full h-80 object-cover rounded-xl shadow-lg">
+                </div>
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-edit text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="md:text-xl font-bold text-gray-900 dark:text-white mb-2">Apply Online</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Fill out our simple online application form with your basic information and loan requirements.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-check-circle text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="md:text-xl font-bold text-gray-900 dark:text-white mb-2">Quick Approval</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Our team reviews your application within hours. Get approval notification via SMS and email.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-university text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="md:text-xl font-bold text-gray-900 dark:text-white mb-2">Receive Funds</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Funds are disbursed directly to your bank account within 24-48 hours of approval.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Support Section -->
+    <section class="py-16 lg:py-24 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">
+                    Built on Trust, Powered by Experience
+                </h2>
+                <p class="md:text-xl text-blue-100 max-w-3xl mx-auto">
+                    This isn't just a financial product—it's a lifeline built by fellow medical professionals who understand what it means to work 48-hour shifts, live on allowances, and face system delays.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Community-Driven</h3>
+                    <p class="text-blue-100">
+                        Our platform ensures transparency, support, and mentorship as you grow in your medical career.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-stethoscope text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Doctor-Designed</h3>
+                    <p class="text-blue-100">
+                        Created by medical professionals who understand the unique challenges of Nigerian healthcare system.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-heart text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Empathy-First</h3>
+                    <p class="text-blue-100">
+                        We understand that starting your medical journey should be exciting, not overwhelming.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile App Download Section -->
+    <section class="py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                        Apply On-the-Go
+                    </h2>
+                    <p class="md:text-xl text-gray-600 dark:text-gray-300 mb-8">
+                        Download the Doclumina mobile app to apply for your survival loan, track your application status, and manage your account anywhere, anytime.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors">
+                            <i class="fab fa-apple mr-3 text-xl"></i>
+                            <div class="text-left">
+                                <div class="text-xs">Download on the</div>
+                                <div class="text-sm font-semibold">App Store</div>
+                            </div>
+                        </a>
+                        <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors">
+                            <i class="fab fa-google-play mr-3 text-xl"></i>
+                            <div class="text-left">
+                                <div class="text-xs">Get it on</div>
+                                <div class="text-sm font-semibold">Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-300">
+                        <div class="flex items-center">
+                            <i class="fas fa-mobile-alt mr-2"></i>
+                            <span>Mobile-Optimized</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-lock mr-2"></i>
+                            <span>Secure & Private</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-bell mr-2"></i>
+                            <span>Real-time Updates</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 lg:mt-0">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-30"></div>
+                        <div class="relative bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl">
+                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Mobile Banking App Interface" class="w-full h-80 object-cover rounded-lg mb-4">
+                            <div class="text-center">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Quick Mobile Access</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                    Apply for loans, check status, and manage repayments all from your smartphone.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

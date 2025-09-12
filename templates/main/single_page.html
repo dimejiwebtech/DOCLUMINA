@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>{% block title %} {{ single_page.title }} - Doclumina {% endblock %}</title>
+
+{% block meta_description %}Your specific page description here{% endblock %}
+{% block meta_keywords %}your, page, specific, keywords{% endblock %}
+
+<!-- Main Content -->
+<section id="main-content" class="min-h-screen pt-12">
+    <!-- Top Header -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div class="flex items-center justify-between">
+          
+ 
+        </div>
+    </div>
+
+    <!-- Preview Content -->
+    <div class="max-w-4xl mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <!-- Page Header -->
+            <div class="p-6 border-b border-gray-200">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ page.title }}</h1>
+                
+                <!-- Meta Information -->
+                <div class="flex items-center text-sm text-gray-600 mb-4">
+                    <span class="mr-4">
+                        <i class="fas fa-user mr-1"></i>
+                        {{ single_page.author_display_name }}
+                    </span>
+                    <span class="mr-4">
+                        <i class="fas fa-calendar mr-1"></i>
+                        {{ single_page.published_date|date:"F j, Y" }}
+                    </span>
+                    
+                </div>
+
+                <!-- Featured Image -->
+                {% if page.featured_image %}
+                <div class="mb-6">
+                    <img src="{{ single_page.featured_image.url }}" alt="{{ page.title }}" class="w-full h-64 object-cover rounded-lg">
+                </div>
+                {% endif %}
+
+                <!-- Excerpt -->
+                {% if page.excerpt %}
+                <div class="mb-6">
+                    <p class="text-lg text-gray-700 italic border-l-4 border-blue-500 pl-4">{{ single_page.excerpt }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Page Content -->
+            <div class="p-6">
+                <div class="prose max-w-none">
+                    {{ single_page.content|safe }}
+                </div>
+            </div>
+           
+        </div>
+
+
+    </div>
+</section>
+
+<style>
+/* Basic prose styling for content */
+.prose {
+    line-height: 1.6;
+    color: #374151;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.prose h1 { font-size: 2.25rem; }
+.prose h2 { font-size: 1.875rem; }
+.prose h3 { font-size: 1.5rem; }
+.prose h4 { font-size: 1.25rem; }
+.prose h5 { font-size: 1.125rem; }
+.prose h6 { font-size: 1rem; }
+
+.prose p {
+    margin-bottom: 1em;
+}
+
+.prose ul, .prose ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+}
+
+.prose li {
+    margin-bottom: 0.5em;
+}
+
+.prose blockquote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1rem;
+    margin: 1.5em 0;
+    font-style: italic;
+    color: #6b7280;
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5em 0;
+}
+
+.prose a {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.prose a:hover {
+    color: #1d4ed8;
+}
+
+.prose code {
+    background-color: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+}
+
+.prose pre {
+    background-color: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5em 0;
+}
+
+.prose pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+}
+</style>
+{% endblock %}

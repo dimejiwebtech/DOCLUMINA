@@ -1,0 +1,72 @@
+{% load static %}
+
+<link href="{% static 'css/output.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
+<link rel="shortcut icon" href="{% static 'images/favicon1-1.png' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'images/favicon1-1.png' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+  
+
+   <!-- Top Bar -->
+    <div class="fixed top-0 left-0 right-0 bg-gray-800 text-white px-4 py-2 z-50">
+        <div class="flex items-center justify-between">
+            <!-- Left side - Logo and Site Name -->
+            <div class="flex items-center space-x-3">
+                
+                <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                    <img src="{% static 'images/favicon1-1.png' %}" alt="">
+                </div>
+                <span class="font-semibold text-lg"><a href="{% url 'homepage' %}">Dolumina</a></span>
+            </div>
+            
+            <!-- Right side - Notifications and Profile -->
+            <div class="flex items-center space-x-4">
+                <!-- Notification Bell -->
+                
+                <!-- Profile Menu -->
+                <div class="profile-menu relative">
+                    <button class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+                        <span class="text-sm">Hi, {{ user.get_full_name|default:user.username }}</span>
+                        <div class="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-xs"></i>
+                        </div>
+                    </button>
+                    
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown">
+                        <div class="py-2">
+
+
+{% if user.is_staff and target_user.id %}
+    <a href="{% url 'edit_user_profile' target_user.id %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+        <i class="fas fa-user-edit mr-2 w-4"></i>
+        <span>Edit Profile</span>
+    </a>
+{% else %}
+    <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+        <i class="fas fa-user-edit mr-2 w-4"></i>
+        <span>Edit Profile</span>
+    </a>
+{% endif %}
+                            <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2 w-4"></i>
+                                <span>Log Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+  <script src="{% static 'js/dashboard_base.js' %}"></script>
+
+    {% endblock %}
+ 

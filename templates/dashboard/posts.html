@@ -1,0 +1,405 @@
+{% extends 'dashboard_base.html' %}
+
+ {% load static %}
+
+<!-- <body class="bg-gray-50"> -->
+ 
+    {% block content %}
+    <title>{% block title %} Posts - Doclumina {% endblock %}</title>
+    <!-- Include the sidebar -->
+    {% include 'dashboard/sidebar.html' %}
+       <!-- Include the sidebar -->
+
+<!-- Main Content -->
+<section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+    <!-- Toggle Button -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3 ">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Toggle Button -->
+    <div class="p-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6 mt-5">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-semibold text-gray-900">Posts</h1>
+                <a href="{% url 'add_post' %}" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                    Add Post
+                </a>
+            </div>
+        </div>
+
+    <!-- {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} bg-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-100 border border-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-400 text-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-700 px-4 py-3 rounded mb-4">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %} -->
+
+        <!-- Mobile Filter Tabs -->
+        <div class="lg:hidden mb-6">
+            <div class="flex flex-wrap gap-2 text-sm">
+                <a href="?status=all" class="{% if current_status == 'all' %}text-blue-600 font-medium{% else %}text-gray-500{% endif %}">
+                    All <span class="text-gray-500">({{ tab_counts.all }})</span>
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="?status=mine" class="{% if current_status == 'mine' %}text-blue-600 font-medium{% else %}text-gray-500{% endif %}">
+                    Mine <span class="text-gray-400">({{ tab_counts.mine }})</span>
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="?status=published" class="{% if current_status == 'published' %}text-blue-600 font-medium{% else %}text-gray-500{% endif %}">
+                    Published <span class="text-gray-400">({{ tab_counts.published }})</span>
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="?status=draft" class="{% if current_status == 'draft' %}text-blue-600 font-medium{% else %}text-gray-500{% endif %}">
+                    Drafts <span class="text-gray-400">({{ tab_counts.draft }})</span>
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="?status=trash" class="{% if current_status == 'trash' %}text-blue-600 underline{% else %}text-gray-500{% endif %}">
+                    Trash <span class="text-gray-400">({{ tab_counts.trash }})</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Desktop Filter Tabs -->
+        <div class="hidden lg:block border-b border-gray-200 mb-6">
+            <nav class="flex space-x-8">
+                <a href="?status=all" class="py-2 px-1 border-b-2 {% if current_status == 'all' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %} font-medium text-sm">
+                    All <span class="text-gray-500">({{ tab_counts.all }})</span>
+                </a>
+                <a href="?status=mine" class="py-2 px-1 border-b-2 {% if current_status == 'mine' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %} font-medium text-sm">
+                    Mine <span class="text-gray-400">({{ tab_counts.mine }})</span>
+                </a>
+                <a href="?status=published" class="py-2 px-1 border-b-2 {% if current_status == 'published' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %} font-medium text-sm">
+                    Published <span class="text-gray-400">({{ tab_counts.published }})</span>
+                </a>
+                <a href="?status=draft" class="py-2 px-1 border-b-2 {% if current_status == 'draft' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %} font-medium text-sm">
+                    Drafts <span class="text-gray-400">({{ tab_counts.draft }})</span>
+                </a>
+                <a href="?status=trash" class="py-2 px-1 border-b-2 {% if current_status == 'trash' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %} font-medium text-sm">
+                    Trash <span class="text-gray-400">({{ tab_counts.trash }})</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Search (Mobile) -->
+        <div class="lg:hidden mb-6">
+            <form method="GET" class="flex space-x-2">
+                <input type="hidden" name="status" value="{{ current_status }}">
+                <input type="hidden" name="category" value="{{ current_category }}">
+                <input type="hidden" name="date" value="{{ current_date }}">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search posts..." class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors border border-blue-600">
+                    Search Posts
+                </button>
+            </form>
+        </div>
+
+        <!-- Desktop Filters and Bulk Actions -->
+        <div class="hidden lg:flex items-center justify-between mb-4">
+            <form method="POST" action="{% url 'bulk_action' %}" id="bulk-form">
+                {% csrf_token %}
+                <div class="flex items-center space-x-4">
+                    <select name="action" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Bulk actions</option>
+                        {% if current_status == 'trash' %}
+                            <option value="restore">Restore</option>
+                            <option value="delete">Delete Permanently</option>
+                        {% else %}
+                            <option value="trash">Move to Trash</option>
+                            <option value="publish">Publish</option>
+                            <option value="draft">Move to Draft</option>
+                        {% endif %}
+                    </select>
+                    <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+                        Apply
+                    </button>
+                </div>
+            </form>
+            <div class="flex items-center space-x-4">
+                <form method="GET" class="flex items-center space-x-4">
+                    <input type="hidden" name="status" value="{{ current_status }}">
+                    <input type="text" name="search" value="{{ search_query }}" placeholder="Search Posts" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64">
+                    <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+                        Search Posts
+                    </button>
+                    <select name="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">All dates</option>
+                        {% for date_option in date_options %}
+                            <option value="{{ date_option.value }}" {% if current_date == date_option.value %}selected{% endif %}>
+                                {{ date_option.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <select name="category" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">All Categories</option>
+                        {% for category in all_categories %}
+                            <option value="{{ category.id }}" {% if current_category == category.id|stringformat:"s" %}selected{% endif %}>
+                                {{ category.category_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+                        Filter
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mobile Post List -->
+        <div class="lg:hidden">
+            {% for post in posts %}
+            <div class="bg-white rounded-lg border border-gray-200 mb-4 p-4">
+                <div class="flex items-start space-x-3">
+                    <input type="checkbox" name="post_ids" value="{{ post.id }}" form="bulk-form" class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <div class="flex-1 min-w-0">
+                        <div class="text-blue-600 hover:text-blue-800 font-medium text-sm mb-2">
+                            <a href="">{{ post.title }}</a>
+                        </div>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-3 text-xs text-gray-500">
+                                <span>{{ post.author.get_full_name|default:post.author.username }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {% for cat in post.category.all %}{{ cat.category_name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                                </span>
+                                {% if post.comment_count > 0 %}
+                                <div class="relative inline-block">
+                                    <i class="fas fa-comment text-gray-400"></i>
+                                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                        {{ post.comment_count }}
+                                    </span>
+                                </div>
+                                {% else %}
+                                <i class="fas fa-comment text-gray-400"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-xs text-gray-500">
+                                <span class="font-medium">{{ post.get_status_display }}</span>
+                                <span class="ml-1">{{ post.published_date|date:"Y/m/d \a\t H:i" }}</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs">
+                                <a href="{% url 'edit_post' post.pk %}" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                <span class="text-gray-300">|</span>
+                                {% if current_status == 'trash' %}
+                                <form method="post" action="{% url 'restore_post' post.pk %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="text-green-600 hover:text-green-800 bg-transparent border-none cursor-pointer p-0">
+                                            Restore
+                                        </button>
+                                    </form>
+                                    
+                                {% else %}
+                                    <form method="post" action="{% url 'delete_post' post.pk %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="text-red-600 hover:text-red-800 bg-transparent border-none cursor-pointer p-0">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    <span class="text-gray-300">|</span>
+                                    <a href="{% url 'preview_post' post.pk %}" class="text-blue-600 hover:text-blue-800 border-none cursor-pointer p-0">View</a>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white rounded-lg border border-gray-200 p-8 text-center">
+                <p class="text-gray-500">No posts found.</p>
+            </div>
+            {% endfor %}
+
+            <!-- Mobile Bulk Actions -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <select name="action" form="bulk-form" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Bulk actions</option>
+                        {% if current_status == 'trash' %}
+                            <option value="restore">Restore</option>
+                            <option value="delete">Delete Permanently</option>
+                        {% else %}
+                            <option value="trash">Move to Trash</option>
+                            <option value="publish">Publish</option>
+                            <option value="draft">Move to Draft</option>
+                        {% endif %}
+                    </select>
+                    <button type="submit" form="bulk-form" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors border border-blue-600">
+                        Apply
+                    </button>
+                </div>
+                <div class="text-sm text-gray-700">
+                    {{ total_items }} item{{ total_items|pluralize }}
+                </div>
+            </div>
+
+            {% if current_status == 'trash' and posts %}
+            <button onclick="if(confirm('Are you sure you want to empty the trash? This action cannot be undone.')) { window.location.href='{'; }" class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors border border-red-600">
+                Empty Bin
+            </button>
+            {% endif %}
+        </div>
+
+        <!-- Desktop Posts Table -->
+        <div class="hidden lg:block bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="w-4 px-6 py-3">
+                            <input type="checkbox" id="select-all" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700">
+                            Title
+                            <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Author
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Categories
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700">
+                            <i class="fas fa-comment mr-1"></i>
+                            <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700">
+                            Date
+                            <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for post in posts %}
+                    <tr class="post-row hover:bg-gray-50 transition-colors">
+                        <td class="w-4 px-6 py-4">
+                            <input type="checkbox" name="post_ids" value="{{ post.id }}" form="bulk-form" class="post-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <a href="{% url 'edit_post' post.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    {{ post.title }}
+                                </a>
+                                <div class="post-actions mt-1">
+                                    <span class="text-xs text-gray-500 space-x-2">
+                                        <a href="{% url 'edit_post' post.pk %}" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                        <span class="text-gray-300">|</span>
+                                        {% if current_status == 'trash' %}
+                                        <form method="post" action="{% url 'restore_post' post.pk %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="text-green-600 hover:text-green-800 bg-transparent border-none cursor-pointer p-0">
+                                            Restore
+                                        </button>
+                                        </form>
+                                        {% else %}
+                                    <form method="post" action="{% url 'delete_post' post.pk %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="text-red-600 hover:text-red-800 bg-transparent border-none cursor-pointer p-0">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    <span class="text-gray-300">|</span>
+                                    <a href="{% url 'preview_post' post.pk %}" class="text-blue-600 hover:text-blue-800">View</a>
+                                    {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            <a href="{% url 'author_page' post.author.username %}" class="text-blue-600 hover:text-blue-800">
+                                {{ post.author.get_full_name|default:post.author.username }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                           {% for cat in post.category.all %}
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1 mb-1">
+        {{ cat.category_name }}
+    </span>
+{% endfor %}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            {% if post.comment_count > 0 %}
+                            <div class="relative inline-block">
+                                <i class="fas fa-comment text-gray-400"></i>
+                                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    {{ post.comment_count }}
+                                </span>
+                            </div>
+                            {% else %}
+                            <i class="fas fa-comment text-gray-400"></i>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            <div class="flex flex-col">
+                                <span class="font-medium">{{ post.get_status_display }}</span>
+                                <span class="text-gray-500 text-xs">{{ post.published_date|date:"Y/m/d \a\t H:i" }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            No posts found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Desktop Pagination -->
+        {% if posts.has_other_pages %}
+        <div class="hidden lg:flex items-center justify-between mt-6">
+            <div class="text-sm text-gray-700">
+                {{ total_items }} item{{ total_items|pluralize }}
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-700">{{ current_page }} of {{ total_pages }}</span>
+                <div class="flex space-x-1">
+                    {% if has_previous %}
+                        <a href="?page={{ previous_page }}&status={{ current_status }}&category={{ current_category }}&date={{ current_date }}&search={{ search_query }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    {% else %}
+                        <button class="px-3 py-1 text-sm bg-gray-100 text-gray-400 rounded cursor-not-allowed">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    {% endif %}
+                    
+                    <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded">
+                        {{ current_page }}
+                    </button>
+                    
+                    {% if has_next %}
+                        <a href="?page={{ next_page }}&status={{ current_status }}&category={{ current_category }}&date={{ current_date }}&search={{ search_query }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% else %}
+                        <button class="px-3 py-1 text-sm bg-gray-100 text-gray-400 rounded cursor-not-allowed">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+
+<script src="{% static 'js/posts.js' %}"></script>
+
+ {% endblock %}

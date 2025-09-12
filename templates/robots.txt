@@ -1,0 +1,52 @@
+User-agent: *
+
+# Allow main pages
+Allow: /
+Allow: /about/
+Allow: /contact/
+Allow: /mentors/
+Allow: /mentorship/
+Allow: /become-mentor/
+Allow: /book-gp/
+Allow: /mental-health/
+Allow: /survival-loan/
+
+# Allow blog content
+Allow: /blog/
+Allow: /category/
+Allow: /author/
+
+# Allow static files
+Allow: /static/
+Allow: /media/
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /analytics/
+Disallow: /google-sitekit/
+Disallow: /media-manager/
+
+# Disallow email templates and payment flows
+Disallow: /emails/
+Disallow: /payment/
+Disallow: /mentorship-payment/
+Disallow: /reject-confirmation/
+
+# Disallow blog utilities
+Disallow: /blog/search/
+Disallow: /blog/preview/
+
+# Disallow auth pages
+Disallow: /login/
+Disallow: /logout/ 
+Disallow: /signup/
+Disallow: /password-reset/
+
+# Block sensitive files
+Disallow: /*.env$
+Disallow: /*.log$
+Disallow: /secrets/
+
+# Sitemap
+Sitemap: {{ sitemap_url }}

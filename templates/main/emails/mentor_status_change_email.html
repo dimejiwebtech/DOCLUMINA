@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Application Status Update</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8fafc; line-height: 1.6;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 40px;">
+        
+        {% if status == 'approved' %}
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+                Dear <strong>{{ full_name }}</strong>,
+            </p>
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+                Great news! Your mentor application status has been updated to <strong>approved</strong>. We're excited to have you join our mentorship community.
+            </p>
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+            Please join our mentorship group using this <a href="https://wa.me/+447537135681?text=%E2%80%8E%20Hello%2C%20I've%20just%20been%20approved%20as%20a%20mentor%20on%20Doclumina.%20Please%20can%20you%20add%20me%20to%20the%20respective%20group%3F" style="color: green;"><strong>WhatsApp Link</strong></a>
+            </p>
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+                Welcome onboard!
+            </p>
+            
+        {% elif status == 'rejected' %}
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+                Dear <strong>{{ full_name }}</strong>,
+            </p>
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+                Your mentor application status has been updated to <strong>rejected</strong>.
+            </p>
+            
+            {% if reason %}
+            <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin: 20px 0;">
+                <p style="color: #dc2626; margin: 0; font-size: 14px;">
+                    <strong>Reason:</strong> {{ reason }}
+                </p>
+            </div>
+            {% endif %}
+            
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+                Thank you for your understanding.
+            </p>
+        {% endif %}
+        
+        <p style="color: #6b7280; font-size: 14px;">
+            Best regards,<br>
+            <strong>Doclumina Team</strong>
+        </p>
+        
+    </div>
+</body>
+</html>

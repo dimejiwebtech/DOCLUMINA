@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Confirm Payment - Doclumina{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto py-12 px-4">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Confirm Payment</h1>
+    <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+        You're about to pay <span class="font-bold">₦{{ application.amount_paid|intcomma }}</span>
+        for <strong>{{ application.get_mentorship_choice_display }}</strong>.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">Confirm & Pay</button>
+    </form>
+</div>
+{% endblock %}
