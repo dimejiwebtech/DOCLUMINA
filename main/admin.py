@@ -98,9 +98,56 @@ class MentorApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(MentorshipApplication)
 class MentorshipApplicationAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", "mentorship_choice", "amount_paid", "is_paid", "applied_at")
-    list_filter = ("is_paid", "mentorship_choice")
-
+    list_display = [
+        'full_name', 
+        'email', 
+        'phone_number', 
+        'display_programs', 
+        'total_amount', 
+        'payment_status', 
+        'applied_at'
+    ]
+    list_filter = ['is_paid', 'applied_at']
+    search_fields = ['full_name', 'email', 'phone_number']
+    readonly_fields = ['total_amount', 'applied_at', 'payment_confirmed_at']
+    ordering = ['-applied_at']
+    
+    fieldsets = (
+        ('Applicant Information', {
+            'fields': ('full_name', 'email', 'phone_number')
+        }),
+        ('Mentorship Details', {
+            'fields': ('mentorship_programs', 'total_amount')
+        }),
+        ('Payment Information', {
+            'fields': ('is_paid', 'payment_reference', 'payment_confirmed_at')
+        }),
+        ('Timestamps', {
+            'fields': ('applied_at',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def display_programs(self, obj):
+        """Display selected programs in admin"""
+        programs = obj.get_program_names()
+        return ', '.join(programs) if programs else 'None'
+    display_programs.short_description = 'Selected Programs'
+    
+    def payment_status(self, obj):
+        """Display payment status with colored indicator"""
+        if obj.is_paid:
+            return format_html(
+                '<span style="color: #10b981; font-weight: bold;">✓ Paid</span>'
+            )
+        return format_html(
+            '<span style="color: #ef4444; font-weight: bold;">✗ Pending</span>'
+        )
+    payment_status.short_description = 'Status'
+    
+    def get_queryset(self, request):
+        """Optimize queries"""
+        return super().get_queryset(request).select_related()
 
 @admin.register(Testimonial)
 class Testimonial(admin.ModelAdmin):

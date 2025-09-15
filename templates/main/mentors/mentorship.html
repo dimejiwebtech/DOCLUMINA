@@ -1,20 +1,194 @@
 {% extends "base.html" %}
 
-{% block title %}Apply for Mentorship - Doclumina{% endblock %}
+{% load static %}
 
-{% block meta_description %}Your specific page description here{% endblock %}
-{% block meta_keywords %}your, page, specific, keywords{% endblock %}
+{% block title %}Apply for Mentorship Programs - Doclumina{% endblock %}
+{% block meta_description %}Apply for professional mentorship programs to advance your medical career with Doclumina experts{% endblock %}
+{% block meta_keywords %}medical mentorship, residency mentorship, USMLE, medical career guidance{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto py-12 px-4">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Apply for Mentorship</h1>
-    <form method="post" class="space-y-6">
-        {% csrf_token %}
-        {{ form.as_p }}
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Professional Mentorship Programs</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Accelerate your medical career with expert guidance from experienced professionals.
+            </p>
+        </div>
 
-        {{ form.captcha }}
-        
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">Proceed to Payment</button>
-    </form>
+        <!-- Form Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Form Header -->
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white">Application Form</h2>
+                <p class="text-blue-100 text-sm">Fill out your details to get started</p>
+            </div>
+
+            <form method="post" class="p-6 space-y-6" id="mentorship-form">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                        Personal Information
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.full_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                Full Name <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="full_name" id="{{ form.full_name.id_for_label }}" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                   placeholder="Enter your full name" required>
+                            {% if form.full_name.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.full_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                Email Address <span class="text-red-500">*</span>
+                            </label>
+                            <input type="email" name="email" id="{{ form.email.id_for_label }}" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                   placeholder="Enter your email address" required>
+                            {% if form.email.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            Phone Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" name="phone_number" id="{{ form.phone_number.id_for_label }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="Enter your phone number (e.g., +234xxxxxxxxx)" required>
+                        {% if form.phone_number.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.phone_number.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Mentorship Programs -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Select Mentorship Programs</h3>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-500">Total Amount:</p>
+                            <p class="text-2xl font-bold text-blue-600" id="total-amount">₦0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        {% for value, label in form.mentorship_programs.field.choices %}
+                        <div class="border border-gray-200 rounded-lg p-4 transition-all duration-200 hover:border-blue-300 cursor-pointer mentorship-program-card" data-program="{{ value }}">
+                            <label class="flex items-start space-x-3 cursor-pointer">
+                                <input type="checkbox" name="mentorship_programs" value="{{ value }}" 
+                                       class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mentorship-checkbox" 
+                                       data-price="{{ value }}">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-sm font-medium text-gray-900">{{ label }}</h4>
+                                            <p class="text-sm text-gray-500 mt-1 program-description" data-program="{{ value }}">
+                                                <!-- Description will be loaded via JavaScript -->
+                                            </p>
+                                        </div>
+                                        <span class="text-lg font-bold text-blue-600 ml-4">
+                                            ₦<span class="program-price" data-program="{{ value }}">0</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if form.mentorship_programs.errors %}
+                        <p class="text-red-500 text-sm mt-2">{{ form.mentorship_programs.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- reCAPTCHA -->
+                <div class="flex justify-center">
+                    {{ form.captcha }}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-4">
+                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200" 
+                            id="submit-btn" disabled>
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0l3-3m-3 3l-3-3m3 3V4m6 0H6"></path>
+                        </svg>
+                        Proceed to Payment
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">You'll be redirected to secure payment page</p>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+// Program descriptions
+const descriptions = {
+    "house_job": "Get guidance on securing house job positions in top Nigerian hospitals and excel during your internship.",
+    "nigerian_residency": "Navigate the Nigerian residency application process with expert mentorship and insider tips.",
+    "usmle_canada": "Master USMLE Step 1, 2, 3 and Canadian residency match with personalized guidance.",
+    "amc_plab": "Ace AMC and PLAB exams for Australian and UK medical practice with proven strategies.",
+    "mph": "Successfully apply to top MPH programs in US, UK, and Canada with tailored application support.",
+    "express_entry": "Navigate Canadian immigration through Express Entry with medical professional expertise.",
+    "non_clinical": "Transition to non-clinical healthcare roles including consulting, pharma, and health tech.",
+    "mdcn_exam": "Pass MDCN examinations with comprehensive study plans and expert guidance."
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.mentorship-checkbox');
+    const totalAmount = document.getElementById('total-amount');
+    const submitBtn = document.getElementById('submit-btn');
+    const prices = JSON.parse('{{ mentorship_prices|safe }}');
+    
+    // Set initial prices and descriptions
+    document.querySelectorAll('.program-price').forEach(priceSpan => {
+        const program = priceSpan.getAttribute('data-program');
+        priceSpan.textContent = (prices[program] || 0).toLocaleString();
+    });
+
+    document.querySelectorAll('.program-description').forEach(descSpan => {
+        const program = descSpan.getAttribute('data-program');
+        descSpan.textContent = descriptions[program] || '';
+    });
+    
+    function updateTotal() {
+        let total = 0;
+        let selectedCount = 0;
+        
+        checkboxes.forEach(checkbox => {
+            const card = checkbox.closest('.mentorship-program-card');
+            
+            if (checkbox.checked) {
+                card.classList.add('border-blue-500', 'bg-blue-50');
+                total += prices[checkbox.value] || 0;
+                selectedCount++;
+            } else {
+                card.classList.remove('border-blue-500', 'bg-blue-50');
+            }
+        });
+        
+        totalAmount.textContent = `₦${total.toLocaleString()}`;
+        submitBtn.disabled = selectedCount === 0;
+    }
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotal);
+    });
+    
+    updateTotal();
+});
+</script>
 {% endblock %}

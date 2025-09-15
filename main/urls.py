@@ -17,6 +17,7 @@ urlpatterns = [
     path('mentorship/', views.mentorship, name='mentorship'),
     path('payment/<int:application_id>/', views.payment_page, name='payment_page'),
     path('success/', views.payment_success, name='payment_success'),
+    path('ajax/program-price/', views.get_program_price, name='get_program_price'),
     # mentorship
     path('book-a-gp/', views.book_gp, name="book_gp"),
     path('mental-health-service/', views.mental_health, name="mental_health"),

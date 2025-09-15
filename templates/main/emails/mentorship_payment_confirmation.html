@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentorship Payment Confirmed</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8fafc; line-height: 1.6;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 40px;">
+        
+        <h1 style="color: #1f2937; font-size: 24px; margin-bottom: 20px; text-align: center;">
+            Payment Confirmed ✓
+        </h1>
+        
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+            Dear <strong>{{ full_name }}</strong>,
+        </p>
+        
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+            Thank you for your payment! Your mentorship application has been successfully processed.
+        </p>
+        
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+            <h3 style="color: #1f2937; margin: 0 0 15px 0; font-size: 16px;">Payment Details</h3>
+            <p style="margin: 5px 0; color: #6b7280;">
+                <strong>Reference:</strong> {{ payment_reference }}
+            </p>
+            <p style="margin: 5px 0; color: #6b7280;">
+                <strong>Amount:</strong> ₦{{ total_amount|floatformat:0 }}
+            </p>
+            <p style="margin: 5px 0; color: #6b7280;">
+                <strong>Date:</strong> {{ payment_date|date:"F j, Y" }}
+            </p>
+        </div>
+        
+        <div style="margin-bottom: 30px;">
+            <h3 style="color: #1f2937; margin: 0 0 15px 0; font-size: 16px;">Selected Programs</h3>
+            {% for program in programs %}
+            <p style="margin: 5px 0; color: #6b7280;">• {{ program.name }}</p>
+            {% endfor %}
+        </div>
+        
+        <div style="background-color: #eff6ff; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+            <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 16px;">What's Next?</h3>
+            <p style="color: #1e40af; margin: 5px 0;">1. Your mentor will contact you within 24 hours</p>
+            <p style="color: #1e40af; margin: 5px 0;">2. You'll receive WhatsApp group access</p>
+            <p style="color: #1e40af; margin: 5px 0;">3. Your first mentorship session will be scheduled</p>
+        </div>
+        
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+            We're excited to support you on your professional journey!
+        </p>
+        
+        <p style="color: #6b7280; font-size: 14px; text-align: center;">
+            Questions? Contact us at <a href="mailto:mentorship@doclumina.com" style="color: #3b82f6;">mentorship@doclumina.com</a>
+        </p>
+        
+        <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+            Best regards,<br>
+            <strong>Doclumina Team</strong>
+        </p>
+        
+    </div>
+</body>
+</html>

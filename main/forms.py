@@ -1,8 +1,10 @@
 # forms.py
 from django import forms
-from .models import MentorApplication, MentorshipApplication, NewsletterSubscription
+from .models import MENTORSHIP_CHOICES, MentorApplication, MentorshipApplication, NewsletterSubscription
 from django.core.exceptions import ValidationError
 from .mixins import RecaptchaV3Mixin
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 
 class ContactForm(RecaptchaV3Mixin, forms.Form):
     name = forms.CharField(
@@ -172,32 +174,57 @@ class MentorApplicationForm(RecaptchaV3Mixin, forms.ModelForm):
         
         return cleaned_data
 
-class MentorshipApplicationForm(RecaptchaV3Mixin, forms.ModelForm):
+class MentorshipApplicationForm(forms.ModelForm):
+    mentorship_programs = forms.MultipleChoiceField(
+        choices=MENTORSHIP_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'mentorship-checkbox'
+        }),
+        required=True,
+        error_messages={
+            'required': 'Please select at least one mentorship program.'
+        }
+    )
+    
+    captcha = ReCaptchaField(widget=ReCaptchaV3())
+
     class Meta:
         model = MentorshipApplication
         fields = [
             "full_name",
             "email",
             "phone_number",
-            "mentorship_choice",
+            "mentorship_programs",
         ]
         widgets = {
             "full_name": forms.TextInput(attrs={
-                'placeholder': 'Your Full Name',
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                'placeholder': 'Enter your full name',
+                'class': 'form-input',
+                'required': True
             }),
             "email": forms.EmailInput(attrs={
-                'placeholder': 'Your Email',
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                'placeholder': 'Enter your email address',
+                'class': 'form-input',
+                'required': True
             }),
             "phone_number": forms.TextInput(attrs={
-                'placeholder': 'Your Phone Number',
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-            }),
-            "mentorship_choice": forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                'placeholder': 'Enter your phone number (e.g., +234xxxxxxxxx)',
+                'class': 'form-input',
+                'required': True
             }),
         }
+
+    def clean_mentorship_programs(self):
+        programs = self.cleaned_data['mentorship_programs']
+        if not programs:
+            raise forms.ValidationError("Please select at least one mentorship program.")
+        return programs
+
+    def clean_phone_number(self):
+        phone = self.cleaned_data['phone_number']
+        # Remove any spaces or dashes
+        phone = phone.replace(' ', '').replace('-', '')
+        return phone
 
 class NewsletterForm(forms.ModelForm):
     class Meta:

@@ -1,9 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Payment Successful - Doclumina{% endblock %}
+
+{% block title %}Payment Successful - Doclumina Mentorship{% endblock %}
+
 {% block content %}
-<div class="max-w-3xl mx-auto py-12 px-4 text-center">
-    <h1 class="text-4xl font-bold text-green-600 dark:text-green-400 mb-4">Payment Successful 🎉</h1>
-    <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Thank you for your payment. Check your email for the WhatsApp group link and next steps.</p>
-    <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">Back to Home</a>
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center py-12">
+    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden text-center">
+            <!-- Success Icon -->
+            <div class="px-8 py-12">
+                <div class="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                    Payment Successful!
+                </h1>
+                
+                <p class="text-gray-600 dark:text-gray-300 mb-8">
+                    Thank you for your payment. You will receive a confirmation email with WhatsApp group links shortly.
+                </p>
+                
+                <div class="space-y-4">
+                    <a href="{% url 'homepage' %}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        Return to Home
+                    </a>
+                </div>
+                
+                <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <h3 class="text-sm font-medium text-blue-900 dark:text-blue-200 mb-2">Next Steps:</h3>
+                    <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+                        <li>• Check your email for confirmation and WhatsApp links</li>
+                        <li>• Join the respective WhatsApp groups</li>
+                        <li>• Your mentorship journey begins!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

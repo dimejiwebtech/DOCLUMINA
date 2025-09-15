@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.conf import settings
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -36,6 +37,29 @@ MENTORSHIP_PRICES = {
     "express_entry": 50000,
     "non_clinical": 50000,
     "mdcn_exam": 50000,
+}
+
+MENTORSHIP_DESCRIPTIONS = {
+    "house_job": "Get guidance on securing house job positions in top Nigerian hospitals and excel during your internship.",
+    "nigerian_residency": "Navigate the Nigerian residency application process with expert mentorship and insider tips.",
+    "usmle_canada": "Master USMLE Step 1, 2, 3 and Canadian residency match with personalized guidance.",
+    "amc_plab": "Ace AMC and PLAB exams for Australian and UK medical practice with proven strategies.",
+    "mph": "Successfully apply to top MPH programs in US, UK, and Canada with tailored application support.",
+    "express_entry": "Navigate Canadian immigration through Express Entry with medical professional expertise.",
+    "non_clinical": "Transition to non-clinical healthcare roles including consulting, pharma, and health tech.",
+    "mdcn_exam": "Pass MDCN examinations with comprehensive study plans and expert guidance.",
+}
+
+# WhatsApp group links for each mentorship program
+MENTORSHIP_WHATSAPP_LINKS = {
+    "house_job": "https://chat.whatsapp.com/housejob-group-link",
+    "nigerian_residency": "https://chat.whatsapp.com/nigerian-residency-group-link",
+    "usmle_canada": "https://chat.whatsapp.com/usmle-canada-group-link",
+    "amc_plab": "https://chat.whatsapp.com/amc-plab-group-link",
+    "mph": "https://chat.whatsapp.com/mph-group-link",
+    "express_entry": "https://chat.whatsapp.com/express-entry-group-link",
+    "non_clinical": "https://chat.whatsapp.com/non-clinical-group-link",
+    "mdcn_exam": "https://chat.whatsapp.com/mdcn-exam-group-link",
 }
 
 class MentorApplication(models.Model):
@@ -98,9 +122,12 @@ class MentorApplication(models.Model):
                         'phone_number': 'An application with this phone number already exists.'
                     })
 
-    def save(self, *args, **kwargs):
-        """Override save to ensure validation runs"""
-        self.full_clean()
+    def save(self, *args, **kwargs):  
+        if self.mentorship_programs:
+            self.total_amount = sum(
+                MENTORSHIP_PRICES.get(program, 0) 
+                for program in self.mentorship_programs
+            )
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -117,29 +144,66 @@ def delete_files_on_application_delete(sender, instance, **kwargs):
         os.remove(instance.certificate.path)
 
 
-# Mentorship Application Model
 class MentorshipApplication(models.Model):
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$',
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+    )
+    
     full_name = models.CharField(max_length=200)
     email = models.EmailField()
-    phone_number = models.CharField(max_length=20)
-    mentorship_choice = models.CharField(
-        choices=MENTORSHIP_CHOICES, max_length=50
+    phone_number = models.CharField(validators=[phone_regex], max_length=17)
+    mentorship_programs = models.JSONField(
+        default=list,
+        help_text="List of selected mentorship programs"
     )
-    amount_paid = models.PositiveIntegerField(editable=False)
+    total_amount = models.PositiveIntegerField(editable=False, default=0)
     is_paid = models.BooleanField(default=False)
     payment_reference = models.CharField(
         max_length=100, blank=True, null=True
     )
     applied_at = models.DateTimeField(auto_now_add=True)
+    payment_confirmed_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-applied_at']
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['is_paid']),
+        ]
 
     def save(self, *args, **kwargs):
-        # Automatically set amount_paid based on mentorship_choice
-        if self.mentorship_choice:
-            self.amount_paid = MENTORSHIP_PRICES.get(self.mentorship_choice, 0)
+        # Calculate total amount based on selected programs
+        if self.mentorship_programs:
+            self.total_amount = sum(
+                MENTORSHIP_PRICES.get(program, 0) 
+                for program in self.mentorship_programs
+            )
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.full_name} - {self.get_mentorship_choice_display()}"
+        programs = ', '.join([
+            dict(MENTORSHIP_CHOICES).get(prog, prog) 
+            for prog in self.mentorship_programs
+        ])
+        return f"{self.full_name} - {programs}"
+    
+    def get_program_names(self):
+        """Return human-readable program names"""
+        return [
+            dict(MENTORSHIP_CHOICES).get(prog, prog) 
+            for prog in self.mentorship_programs
+        ]
+    
+    def get_whatsapp_links(self):
+        """Return WhatsApp links for selected programs"""
+        return [
+            {
+                'program': dict(MENTORSHIP_CHOICES).get(prog, prog),
+                'link': MENTORSHIP_WHATSAPP_LINKS.get(prog, '#')
+            }
+            for prog in self.mentorship_programs
+        ]
     
 
 # Testimonials Model

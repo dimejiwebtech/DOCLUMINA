@@ -1,3 +1,4 @@
+from django.utils import timezone
 import json
 from django.db import IntegrityError
 from django.forms import ValidationError
@@ -14,7 +15,7 @@ from blog.models import Page, Post
 from .forms import ContactForm, MentorApplicationForm, MentorshipApplicationForm, NewsletterForm
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from .models import CookieConsent, MentorApplication, MentorshipApplication, Testimonial
+from .models import MENTORSHIP_PRICES, CookieConsent, MentorApplication, MentorshipApplication, Testimonial
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -209,59 +210,121 @@ def mentors(request):
 
 
 def mentorship(request):
+    """Display mentorship application form"""
     if request.method == "POST":
         form = MentorshipApplicationForm(request.POST)
         if form.is_valid():
             application = form.save(commit=False)
-            # Payment will happen next
             application.save()
-            # Redirect to mock payment gateway page
-            return redirect(
-                reverse("payment_page", args=[application.id])
-            )
-        
+            
+            # Redirect to payment page
+            return redirect(reverse("payment_page", args=[application.id]))
         else:
             if 'captcha' in form.errors:
                 messages.error(request, 'reCAPTCHA verification failed. Please try again.')
     else:
         form = MentorshipApplicationForm()
 
-    context={
-        'form':form,
+    context = {
+        'form': form,
+        'mentorship_prices': json.dumps(MENTORSHIP_PRICES)
     }
     return render(request, 'main/mentors/mentorship.html', context)
 
-
 def payment_page(request, application_id):
-    application = MentorshipApplication.objects.get(pk=application_id)
+    """Handle payment page and confirmation"""
+    application = get_object_or_404(MentorshipApplication, pk=application_id)
+    
+    if application.is_paid:
+        messages.info(request, 'This application has already been paid for.')
+        return redirect(reverse("payment_success"))
 
     if request.method == "POST":
-        # Simulate payment confirmation
+    # payment confirmation 
+        application.payment_reference = f"PAY{application.id}{timezone.now().strftime('%Y%m%d%H%M')}"
+        application.payment_confirmed_at = timezone.now()
         application.is_paid = True
-        application.payment_reference = "PAY123456789"  # Example ref
         application.save()
 
-        # Send confirmation email with WhatsApp link
-        send_mail(
-            subject="Mentorship Payment Confirmed",
-            message=f"Dear {application.full_name},\n\nYour payment of ₦{application.amount_paid:,} for {application.get_mentorship_choice_display()} has been confirmed!\n\nJoin the WhatsApp group using this link: [WhatsApp Group Link Here]\n\nThank you,\nDoclumina Team",
-            from_email="mentorship@doclumina.com",
-            recipient_list=[application.email],
-            fail_silently=False,
-        )
+    # Send confirmation email to applicant (after saving the payment details)
+        send_applicant_confirmation_email(application)
+        
+        # Send notification email to admin
+        send_admin_notification_email(application)
 
+        messages.success(request, 'Payment confirmed successfully!')
         return redirect(reverse("payment_success"))
-    
-    context ={
+
+    context = {
         'application': application,
     }
-
-    return render(
-        request, "main/mentors/mentorship_payment_page.html", context)
-
+    return render(request, "main/mentors/mentorship_payment_page.html", context)
 
 def payment_success(request):
+    """Display payment success page"""
     return render(request, "main/mentors/mentorship_payment_success.html")
+
+def send_applicant_confirmation_email(application):
+    """Send confirmation email to the applicant"""
+    try:
+        # Get fresh data from database
+        application.refresh_from_db()
+        
+        context = {
+            'application': application,
+            'name': application.full_name,
+            'reference': application.payment_reference,
+            'date': application.payment_confirmed_at.strftime('%B %d, %Y') if application.payment_confirmed_at else 'N/A',
+            'amount': application.total_amount,
+            'whatsapp_links': application.get_whatsapp_links(),
+        }
+        
+        
+        html_message = render_to_string('main/emails/mentorship_payment_confirmation.html', context)
+        plain_message = strip_tags(html_message)
+
+        send_mail(
+            subject="Mentorship Payment Confirmed - Welcome to Doclumina!",
+            message=plain_message,
+            from_email=f"Doclumina Mentorship <{settings.CONTACT_EMAIL}>",
+            recipient_list=[application.email],
+            html_message=html_message,
+            fail_silently=False
+        )
+        # For debugging
+        print(f"Confirmation email sent to {application.email}")  
+    except Exception as e:
+        print(f"Error sending applicant email: {e}")
+
+def send_admin_notification_email(application):
+    """Send notification email to admin"""
+    try:
+        html_message = render_to_string('main/emails/admin_mentorship_notification.html', {
+            'application': application,
+        })
+        plain_message = strip_tags(html_message)
+
+        # Send to admin email (you can configure multiple admins)
+        admin_emails = [settings.ADMIN_EMAIL] if hasattr(settings, 'ADMIN_EMAIL') else [settings.CONTACT_EMAIL]
+        
+        send_mail(
+            subject=f"New Mentorship Payment - {application.full_name}",
+            message=plain_message,
+            from_email=f"Doclumina System <{settings.CONTACT_EMAIL}>",
+            recipient_list=admin_emails,
+            html_message=html_message,
+            fail_silently=False
+        )
+    except Exception as e:
+        print(f"Error sending admin notification: {e}")
+
+def get_program_price(request):
+    """AJAX endpoint to get price for selected programs"""
+    if request.method == 'GET':
+        programs = request.GET.getlist('programs[]')
+        total = sum(MENTORSHIP_PRICES.get(program, 0) for program in programs)
+        return JsonResponse({'total_price': total})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 

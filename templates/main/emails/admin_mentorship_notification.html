@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Mentorship Payment</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8fafc; line-height: 1.6;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 40px;">
+        
+        <h1 style="color: #dc2626; font-size: 24px; margin-bottom: 20px;">
+            New Mentorship Payment Received
+        </h1>
+
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+            A new mentorship payment has been confirmed. Here are the details:
+        </p>
+
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="color: #374151; margin: 0 0 15px; font-size: 18px;">Applicant Details</h3>
+            
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Name:</strong> {{ application.full_name }}
+            </p>
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Email:</strong> {{ application.email }}
+            </p>
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Phone:</strong> {{ application.phone_number }}
+            </p>
+        </div>
+
+        <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="color: #1d4ed8; margin: 0 0 15px; font-size: 18px;">Payment Information</h3>
+            
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Total Amount:</strong> ₦{{ application.total_amount|floatformat:0 }}
+            </p>
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Payment Reference:</strong> {{ application.payment_reference }}
+            </p>
+            <p style="margin: 10px 0; color: #4b5563;">
+                <strong>Payment Date:</strong> {{ application.payment_confirmed_at|date:"F d, Y \a\\t H:i" }}
+            </p>
+        </div>
+
+        <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h3 style="color: #166534; margin: 0 0 15px; font-size: 18px;">Selected Programs</h3>
+            <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                {% for program_name in application.get_program_names %}
+                    <li style="margin-bottom: 5px;">{{ program_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <p style="color: #6b7280; font-size: 14px;">
+            This is an automated notification from the Doclumina mentorship system.
+        </p>
+
+    </div>
+</body>
+</html>
