@@ -199,7 +199,7 @@ class MentorshipApplicationForm(RecaptchaV3Mixin, forms.ModelForm):
             }),
         }
 
-class NewsletterForm(RecaptchaV3Mixin, forms.ModelForm):
+class NewsletterForm(forms.ModelForm):
     class Meta:
         model = NewsletterSubscription
         fields = ['full_name', 'email', 'university', 'current_role', 'whatsapp_line']

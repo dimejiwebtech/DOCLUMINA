@@ -115,6 +115,7 @@ def contact(request):
     }
     return render(request, 'main/contact.html', context)
 
+
 def become_mentor(request):
     if request.method == "POST":
         form = MentorApplicationForm(request.POST, request.FILES)
@@ -284,7 +285,6 @@ def single_page(request, slug):
     return render(request, 'main/single_page.html', context)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class NewsletterSubscribeView(View):
     def post(self, request):
         form = NewsletterForm(request.POST)
@@ -297,15 +297,27 @@ class NewsletterSubscribeView(View):
                     'success': True,
                     'message': 'Thank you! You\'re now part of our exclusive healthcare community.'
                 })
+            except IntegrityError:  
+                return JsonResponse({
+                    'success': False,
+                    'message': 'This email is already subscribed to our newsletter.'
+                })
             except Exception as e:
                 return JsonResponse({
                     'success': False,
-                    'message': 'Email already exists or error occurred.'
+                    'message': 'An error occurred. Please try again.'
                 })
         
+        error_message = 'Please check your input and try again.'
+        if form.errors:
+            # Get the first error from the first field that has errors
+            first_field_errors = list(form.errors.values())[0]
+            if first_field_errors:
+                error_message = first_field_errors[0]
+
         return JsonResponse({
             'success': False,
-            'message': 'Please check your input and try again.'
+            'message': error_message
         })
     
     def save_to_google_sheets(self, subscription):

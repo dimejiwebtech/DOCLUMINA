@@ -12,6 +12,7 @@ venv/
 /static/
 media/
 *.pot
+doclumina_data.sql
 
 # Environment & Secrets
 .env
