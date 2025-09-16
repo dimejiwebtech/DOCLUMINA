@@ -56,6 +56,12 @@ urlpatterns = [
     path('mentors/delete/<int:pk>/', views.delete_application, name='delete_application'),
     path('mentors/change-status/<int:pk>/', views.change_status, name='change_status'),
     # Mentors Application
+
+    #Mentorship Payment
+    path('mentorship/', views.mentorship_application_dashboard, name='mentorship_dashboard'),
+    path('mentorship/detail/<int:application_id>/', views.mentorship_application_detail, name='mentorship_detail'),
+    path('mentorship/delete/<int:application_id>/', views.mentorship_application_delete, name='mentorship_delete'),
+    #Mentorship Payment
     
     # Testimonials
     path('testimonials/', views.testimonials, name='testimonials'),

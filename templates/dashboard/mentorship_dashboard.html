@@ -1,0 +1,179 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}All Mentorship Payments - Doclumina{% endblock %}</title>
+
+<!-- Include the sidebar -->
+{% include 'dashboard/sidebar.html' %}
+
+<!-- Main Content -->
+<section id="main-content" class="lg:ml-64 min-h-screen pt-12">
+    <!-- Top Header -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-600 hover:text-gray-900 mr-4">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-900">Mentorship Applications</h1>
+            </div>
+            <div class="text-sm text-gray-600">
+                {{ total_count }} total application{{ total_count|pluralize }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="p-4 lg:p-6">
+        <!-- Search Bar -->
+        <div class="mb-6">
+            <form method="get" class="flex gap-2">
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="{{ search_query }}" 
+                    placeholder="Search by name, email, phone, or reference..." 
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Search
+                </button>
+                {% if search_query %}
+                <a href="{% url 'mentorship_dashboard' %}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                    Clear
+                </a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Applications Table -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Applicant</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Contact</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Programs</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Amount</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Status</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Applied</th>
+                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for application in page_obj %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3">
+                            <div class="font-medium text-gray-900">{{ application.full_name }}</div>
+                            {% if application.payment_reference %}
+                            <div class="text-sm text-gray-500">Ref: {{ application.payment_reference }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-900">{{ application.email }}</div>
+                            <div class="text-sm text-gray-500">{{ application.phone_number }}</div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-900">
+                                {% for program in application.get_program_names|slice:":2" %}
+                                    {{ program }}{% if not forloop.last %},<br>{% endif %}
+                                {% endfor %}
+                                {% if application.get_program_names|length > 2 %}
+                                <span class="text-gray-500">+{{ application.get_program_names|length|add:"-2" }} more</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="font-medium text-gray-900">₦{{ application.total_amount|floatformat:0 }}</span>
+                        </td>
+                        <td class="px-4 py-3">
+                            {% if application.is_paid %}
+                            <span class="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                Paid
+                            </span>
+                            {% else %}
+                            <span class="inline-flex px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+                                Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ application.applied_at|date:"M d, Y" }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="flex gap-2">
+                                <button onclick="showDetails({{ application.id }})" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    View
+                                </button>
+                                <button onclick="deleteApplication({{ application.id }})" class="text-red-600 hover:text-red-800 text-sm">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                            {% if search_query %}
+                                No applications found matching "{{ search_query }}"
+                            {% else %}
+                                No applications yet
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="mt-6 flex justify-center">
+            <nav class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">
+                    First
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">
+                    Previous
+                </a>
+                {% endif %}
+                
+                <span class="px-3 py-2 text-sm bg-blue-600 text-white rounded">
+                    {{ page_obj.number }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">
+                    Next
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">
+                    Last
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Modal -->
+<div id="detailModal" class="fixed inset-0 bg-transparent bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Application Details</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="p-4">
+                <!-- Content loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/mentorship_dashboard.js' %}"></script>
+{% endblock %}

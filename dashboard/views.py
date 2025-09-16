@@ -22,7 +22,7 @@ from django.views.decorators.http import require_http_methods
 from media_manager.models import MediaFile
 from django.http import JsonResponse, QueryDict
 from django.urls import reverse
-from main.models import MentorApplication, Testimonial
+from main.models import MentorApplication, MentorshipApplication, Testimonial
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.db import transaction
@@ -1373,6 +1373,62 @@ def change_status(request, pk):
             messages.warning(request, f"Status changed but email failed to send: {str(e)}", extra_tags='mentor_dashboard')
     
     return redirect('mentor_applications_dashboard')
+
+def mentorship_application_dashboard(request):
+    """Dashboard view with search and pagination"""
+    search_query = request.GET.get('search', '').strip()
+    
+    # Get all applications
+    applications = MentorshipApplication.objects.all()
+    
+    # Apply search filter
+    if search_query:
+        applications = applications.filter(
+            Q(full_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone_number__icontains=search_query) |
+            Q(payment_reference__icontains=search_query)
+        )
+    
+    # Pagination
+    paginator = Paginator(applications, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'total_count': paginator.count
+    }
+    return render(request, 'dashboard/mentorship_dashboard.html', context)
+
+def mentorship_application_detail(request, application_id):
+    """AJAX endpoint to get application details for modal"""
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        application = get_object_or_404(MentorshipApplication, pk=application_id)
+        
+        data = {
+            'id': application.id,
+            'full_name': application.full_name,
+            'email': application.email,
+            'phone_number': application.phone_number,
+            'programs': application.get_program_names(),
+            'total_amount': application.total_amount,
+            'is_paid': application.is_paid,
+            'payment_reference': application.payment_reference or 'N/A',
+            'applied_at': application.applied_at.strftime('%B %d, %Y at %I:%M %p'),
+            'payment_confirmed_at': application.payment_confirmed_at.strftime('%B %d, %Y at %I:%M %p') if application.payment_confirmed_at else 'N/A'
+        }
+        return JsonResponse(data)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def mentorship_application_delete(request, application_id):
+    """AJAX endpoint to delete application"""
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        application = get_object_or_404(MentorshipApplication, pk=application_id)
+        application.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @administrator_required
 @login_required(login_url='login')
