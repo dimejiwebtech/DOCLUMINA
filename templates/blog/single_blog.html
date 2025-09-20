@@ -293,7 +293,7 @@
                 </div>
                 <div class="p-6">
                     <!-- Featured Articles -->
-                    {% for post in featured_posts %}
+                    {% for post in featured_post %}
                         <article class="mb-8 last:mb-0">
                             <div class="relative mb-3">
                                 <img src="{{post.featured_image.url}}" 
@@ -326,7 +326,7 @@
                         <h4 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-4 uppercase tracking-wide">Related Posts</h4>
                         <div class="space-y-4">
                             {% for post in posts %}
-                                {% if forloop.counter <= 3 %}
+                                {% if forloop.counter <= 5 %}
                                     <article class="flex gap-3">
                                         <img src="{{post.featured_image.url}}" 
                                              alt="{{post.title}}" 

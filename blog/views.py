@@ -12,7 +12,7 @@ from media_manager.models import User
 
 
 def blog_main(request):
-    featured_post = Post.objects.filter(is_featured=True, status='published')
+    featured_post = Post.objects.filter(category__category_name="Featured").order_by("-published_date")[:3]
     
     posts = Post.objects.filter(is_featured=False, status='published')
     paginator = Paginator(posts, 6)
@@ -49,7 +49,7 @@ def posts_by_category_or_post(request, slug):
         show_newsletter = single_post.category.filter(category_name__icontains='House Job Content').exists()
 
 
-    featured_posts = Post.objects.filter(is_featured=True, status='published')
+    featured_post = Post.objects.filter(category__category_name="Featured").order_by("-published_date")[:1]
     posts = Post.objects.filter(is_featured=False, status='published')
     
     
@@ -107,7 +107,7 @@ def posts_by_category_or_post(request, slug):
     context = {
         'single_post': single_post,
         'author': single_post.author,
-        'featured_posts': featured_posts,
+        'featured_post': featured_post,
         'posts': posts,
         'comment_form': comment_form,
         'comments': comments,
