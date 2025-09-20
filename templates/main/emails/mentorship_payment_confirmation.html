@@ -8,58 +8,66 @@
 <body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8fafc; line-height: 1.6;">
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 40px;">
         
-        <h1 style="color: #1f2937; font-size: 24px; margin-bottom: 20px; text-align: center;">
-            Payment Confirmed ✓
+        <h1 style="color: #2563eb; font-size: 24px; margin-bottom: 20px; text-align: center;">
+            Payment Confirmed!
         </h1>
-        
+
         <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
-            Dear <strong>{{ full_name }}</strong>,
+            Dear <strong>{{ name }}</strong>,
         </p>
-        
+
         <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
-            Thank you for your payment! Your mentorship application has been successfully processed.
+            Your payment of <strong>₦{{ amount }}</strong> has been successfully processed for the following mentorship program(s):
         </p>
-        
-        <div style="background-color: #f9fafb; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
-            <h3 style="color: #1f2937; margin: 0 0 15px 0; font-size: 16px;">Payment Details</h3>
-            <p style="margin: 5px 0; color: #6b7280;">
-                <strong>Reference:</strong> {{ payment_reference }}
-            </p>
-            <p style="margin: 5px 0; color: #6b7280;">
-                <strong>Amount:</strong> ₦{{ total_amount|floatformat:0 }}
-            </p>
-            <p style="margin: 5px 0; color: #6b7280;">
-                <strong>Date:</strong> {{ payment_date|date:"F j, Y" }}
-            </p>
+
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                {% for program_name in application.get_program_names %}
+                    <li style="margin-bottom: 8px; font-weight: 500;">{{ program_name }}</li>
+                {% endfor %}
+            </ul>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d1d5db;">
+                <p style="margin: 5px 0; color: #6b7280; font-size: 14px;">
+                    <strong>Payment Reference:</strong> {{ reference }}
+                </p>
+                <p style="margin: 5px 0; color: #6b7280; font-size: 14px;">
+                    <strong>Payment Date:</strong> {{ date }}
+                </p>
+            </div>
         </div>
-        
-        <div style="margin-bottom: 30px;">
-            <h3 style="color: #1f2937; margin: 0 0 15px 0; font-size: 16px;">Selected Programs</h3>
-            {% for program in programs %}
-            <p style="margin: 5px 0; color: #6b7280;">• {{ program.name }}</p>
+
+        <div style="background-color: #ecfdf5; border: 1px solid #d1fae5; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h3 style="color: #047857; margin: 0 0 15px; font-size: 18px;">
+                Join Your WhatsApp Groups
+            </h3>
+            <p style="color: #065f46; margin-bottom: 15px; font-size: 14px;">
+                Click the links below to join your mentorship WhatsApp groups:
+            </p>
+            
+            {% for link_info in whatsapp_links %}
+                <div style="margin-bottom: 15px; padding: 12px; background-color: #f0fdf4; border-radius: 6px;">
+                    <p style="color: #065f46; font-weight: 600; margin: 0 0 8px; font-size: 14px;">
+                        {{ link_info.program }}
+                    </p>
+                    <a href="{{ link_info.link }}" 
+                       style="color: #ffffff; background-color: #10b981; padding: 8px 16px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500; font-size: 14px;">
+                        Join WhatsApp Group
+                    </a>
+                </div>
             {% endfor %}
         </div>
-        
-        <div style="background-color: #eff6ff; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
-            <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 16px;">What's Next?</h3>
-            <p style="color: #1e40af; margin: 5px 0;">1. Your mentor will contact you within 24 hours</p>
-            <p style="color: #1e40af; margin: 5px 0;">2. You'll receive WhatsApp group access</p>
-            <p style="color: #1e40af; margin: 5px 0;">3. Your first mentorship session will be scheduled</p>
+
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+            Welcome to your mentorship journey! Our expert mentors are excited to guide you toward achieving your career goals.
+        </p>
+
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                Best regards,<br>
+                <strong style="color: #374151;">Doclumina Team</strong>
+            </p>
         </div>
-        
-        <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
-            We're excited to support you on your professional journey!
-        </p>
-        
-        <p style="color: #6b7280; font-size: 14px; text-align: center;">
-            Questions? Contact us at <a href="mailto:mentorship@doclumina.com" style="color: #3b82f6;">mentorship@doclumina.com</a>
-        </p>
-        
-        <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
-            Best regards,<br>
-            <strong>Doclumina Team</strong>
-        </p>
-        
+
     </div>
 </body>
 </html>

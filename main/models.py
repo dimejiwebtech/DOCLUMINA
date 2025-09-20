@@ -29,14 +29,14 @@ MENTORSHIP_CHOICES = [
 ]
 
 MENTORSHIP_PRICES = {
-    "house_job": 15000,
-    "nigerian_residency": 50000,
-    "usmle_canada": 50000,
-    "amc_plab": 50000,
-    "mph": 50000,
-    "express_entry": 50000,
-    "non_clinical": 50000,
-    "mdcn_exam": 50000,
+    "house_job": 30000,
+    "nigerian_residency": 100000,
+    "usmle_canada": 100000,
+    "amc_plab": 100000,
+    "mph": 100000,
+    "express_entry": 100000,
+    "non_clinical": 100000,
+    "mdcn_exam": 100000,
 }
 
 MENTORSHIP_DESCRIPTIONS = {
